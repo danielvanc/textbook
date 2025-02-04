@@ -6,9 +6,15 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:push": "npx prisma db push",
+    "db:pull": "npx prisma db pull",
+    "db:gen": "npx prisma generate",
+    "db:studio": "npx prisma studio"
   },
   "dependencies": {
+    "@epic-web/remember": "^1.1.0",
+    "@prisma/client": "^6.3.1",
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -22,6 +28,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
     "postcss": "^8",
+    "prisma": "^6.3.1",
     "tailwindcss": "^4.0.3",
     "typescript": "^5"
   }
