@@ -7,5 +7,5 @@ const NEXTAUTH_URL = process.env.VERCEL_URL
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [Google],
-  redirectProxyUrl: NEXTAUTH_URL + "/api/auth/",
+  redirectProxyUrl: NEXTAUTH_URL + "/api/auth",
 });
