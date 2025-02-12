@@ -2,11 +2,9 @@ import { auth } from "@/auth";
 import appConfig from "@/utils/config";
 import { NextResponse } from "next/server";
 
-const protectedRoutes = "/home";
-
 export default auth((req) => {
   const path = req.nextUrl.pathname;
-  const isProtectedRoute = path.startsWith(protectedRoutes);
+  const isProtectedRoute = path.startsWith(appConfig.appRoute);
 
   if (isProtectedRoute && !appConfig.sessionCookie)
     return NextResponse.redirect(new URL(appConfig.loginRoute, req.url));
