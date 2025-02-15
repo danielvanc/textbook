@@ -1,11 +1,9 @@
 import { remember } from "@epic-web/remember";
 import { PrismaClient } from "@prisma/client";
 import chalk from "chalk";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 
-export const prisma = remember("prisma", () => {
-  // NOTE: if you change anything in this function you'll need to restart
-  // the dev server to see your changes.
-
+const prismaClientSingleton = () => {
   // Feel free to change this log threshold to something that makes sense for you
   const logThreshold = 20;
 
@@ -15,7 +13,13 @@ export const prisma = remember("prisma", () => {
       { level: "error", emit: "stdout" },
       { level: "warn", emit: "stdout" },
     ],
+    datasources: {
+      db: {
+        url: "file:./data.db?connection_limit=1",
+      },
+    },
   });
+
   client.$on("query", async (e) => {
     if (e.duration < logThreshold) return;
     const color =
@@ -31,6 +35,10 @@ export const prisma = remember("prisma", () => {
     const dur = chalk[color](`${e.duration}ms`);
     console.info(`prisma:query - ${dur} - ${e.query}`);
   });
+
   void client.$connect();
   return client;
-});
+};
+
+export const prisma = remember("prisma", prismaClientSingleton);
+export const authAdapter = PrismaAdapter(prisma);
