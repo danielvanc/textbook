@@ -13,11 +13,6 @@ const prismaClientSingleton = () => {
       { level: "error", emit: "stdout" },
       { level: "warn", emit: "stdout" },
     ],
-    datasources: {
-      db: {
-        url: "file:./data.db?connection_limit=1",
-      },
-    },
   });
 
   client.$on("query", async (e) => {
