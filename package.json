@@ -7,7 +7,7 @@
     "build": "npx prisma generate --no-engine && next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "npx prisma generate --no-enginee",
+    "postinstall": "npx prisma generate --no-engine",
     "db:push": "npx prisma db push",
     "db:pull": "npx prisma db pull",
     "db:gen": "npx prisma generate",
