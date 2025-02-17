@@ -1,5 +1,6 @@
 import { remember } from "@epic-web/remember";
 import { PrismaClient } from "@prisma/client";
+import { withAccelerate } from "@prisma/extension-accelerate";
 import chalk from "chalk";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
@@ -30,6 +31,7 @@ const prismaClientSingleton = () => {
     const dur = chalk[color](`${e.duration}ms`);
     console.info(`prisma:query - ${dur} - ${e.query}`);
   });
+  client.$extends(withAccelerate());
 
   void client.$connect();
   return client;
