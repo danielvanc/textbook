@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "npx prisma generate --no-engine",
+    "db:seed": "npx prisma db seed",
     "db:push": "npx prisma db push",
     "db:pull": "npx prisma db pull",
     "db:gen": "npx prisma generate",
@@ -16,7 +17,7 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",
     "@epic-web/remember": "^1.1.0",
-    "@prisma/client": "^6.3.1",
+    "@prisma/client": "^6.4.0",
     "@prisma/extension-accelerate": "^1.2.2",
     "next": "15.1.6",
     "next-auth": "^5.0.0-beta.25",
@@ -32,8 +33,12 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
     "postcss": "^8",
-    "prisma": "^6.3.1",
+    "prisma": "^6.4.0",
     "tailwindcss": "^4.0.4",
+    "tsx": "^4.19.3",
     "typescript": "^5"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }
