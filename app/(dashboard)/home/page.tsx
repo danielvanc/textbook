@@ -1,11 +1,12 @@
-import { auth } from "@/auth";
 import LogOut from "@/components/logout";
-import { redirect } from "next/navigation";
+import { getUsersPosts } from "@/utils/db";
+import { verifyUserSession } from "@/utils/session";
 
 export default async function Home() {
-  const session = await auth();
+  const userId = await verifyUserSession();
+  const { posts } = await getUsersPosts(userId);
 
-  if (!session) redirect("/login");
+  console.log("posts", posts);
 
   return (
     <div>
