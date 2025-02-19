@@ -22,8 +22,8 @@ async function seed() {
       accounts: {
         create: {
           provider: user.provider,
-          providerAccountId: user.providerAccId ?? "",
-          access_token: user.providerAccToken,
+          providerAccountId: user?.providerAccId ?? "",
+          access_token: user?.providerAccToken ?? "",
           token_type: user.tokenType,
           scope: user.scope,
           id_token: user.idToken,
