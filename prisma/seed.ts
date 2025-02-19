@@ -13,7 +13,6 @@ async function seed() {
   }
 
   await prisma.user.create({
-    select: { id: true, email: true, name: true },
     data: {
       id: user.id,
       email: user.email,
@@ -22,8 +21,8 @@ async function seed() {
       accounts: {
         create: {
           provider: user.provider,
-          providerAccountId: user?.providerAccId ?? "",
-          access_token: user?.providerAccToken ?? "",
+          providerAccountId: user?.providerAccountId ?? "",
+          access_token: user?.providerAccountToken ?? "",
           token_type: user.tokenType,
           scope: user.scope,
           id_token: user.idToken,
