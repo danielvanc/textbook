@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import chalk from "chalk";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import { redirect } from "next/navigation";
 
 const prismaClientSingleton = () => {
   // Feel free to change this log threshold to something that makes sense for you
@@ -68,4 +69,39 @@ export function createSingleUser() {
     scope,
     idToken,
   };
+}
+
+export function createSeedPosts() {
+  return [
+    {
+      title: "First Post",
+      content:
+        "This is your first note! You can write anything you want here. Click the edit button to start writing.",
+    },
+    {
+      title: "Second Post",
+      content: "More text",
+    },
+    {
+      title: "Third Post",
+      content: "More text",
+    },
+  ];
+}
+
+export async function getUsersPosts(userId: string) {
+  const [user, posts] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, email: true, name: true },
+    }),
+    prisma.post.findMany({
+      where: { ownerId: userId },
+      select: { id: true, title: true, content: true },
+    }),
+  ]);
+
+  if (!user) redirect("/login");
+
+  return { user, posts };
 }

@@ -1,4 +1,4 @@
-import { createSingleUser, prisma } from "@/utils/db";
+import { createSeedPosts, createSingleUser, prisma } from "@/utils/db";
 
 async function seed() {
   console.log("🌱 Seeding...");
@@ -29,6 +29,9 @@ async function seed() {
           id_token: user.idToken,
           type: user.type,
         },
+      },
+      Post: {
+        create: [...createSeedPosts()],
       },
     },
   });
