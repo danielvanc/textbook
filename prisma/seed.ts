@@ -12,27 +12,24 @@ async function seed() {
     await prisma.user.delete({ where: { id: user.id } });
   }
 
-  const newUser = await prisma.user.create({
+  await prisma.user.create({
     select: { id: true, email: true, name: true },
     data: {
       id: user.id,
       email: user.email,
       name: user.name,
       image: user.image,
-    },
-  });
-
-  await prisma.account.create({
-    select: { userId: true, provider: true, providerAccountId: true },
-    data: {
-      userId: newUser.id,
-      provider: user.provider,
-      providerAccountId: user.providerAccId as string,
-      access_token: user.providerAccToken,
-      token_type: user.tokenType,
-      scope: user.scope,
-      id_token: user.idToken,
-      type: user.type,
+      accounts: {
+        create: {
+          provider: user.provider,
+          providerAccountId: user.providerAccId ?? "",
+          access_token: user.providerAccToken,
+          token_type: user.tokenType,
+          scope: user.scope,
+          id_token: user.idToken,
+          type: user.type,
+        },
+      },
     },
   });
 
