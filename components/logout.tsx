@@ -1,5 +1,6 @@
 import { signOut } from "@/auth";
 import config from "@/utils/config";
+import LogoutButton from "./LogoutButton";
 
 export default function LogOut() {
   return (
@@ -9,7 +10,7 @@ export default function LogOut() {
         await signOut({ redirectTo: config.loginRoute });
       }}
     >
-      <button type="submit">Log Out</button>
+      <LogoutButton />
     </form>
   );
 }

@@ -3,7 +3,7 @@
 import { useFormStatus } from "react-dom";
 import Spinner from "@/components/icons/spinner";
 
-export default function LoginButton() {
+export default function LogoutButton() {
   const { pending } = useFormStatus();
 
   return (
@@ -15,10 +15,10 @@ export default function LoginButton() {
       {pending ? (
         <div className="flex justify-between whitespace-nowrap space-x-2">
           <Spinner />
-          <strong>Logging in...</strong>
+          <strong>Logging out...</strong>
         </div>
       ) : (
-        "Login with Google"
+        "Log out"
       )}
     </button>
   );
