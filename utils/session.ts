@@ -8,5 +8,5 @@ export async function verifyUserSession() {
 
   if (!userId) redirect("/login");
 
-  return userId;
+  return { session, userId };
 }
