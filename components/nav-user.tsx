@@ -27,7 +27,6 @@ function logUserOut(event: React.FormEvent<HTMLFormElement>) {
 }
 
 export function NavUser({ user }: { user: User }) {
-  console.log("user image", user.image);
   const { isMobile } = useSidebar();
 
   return (

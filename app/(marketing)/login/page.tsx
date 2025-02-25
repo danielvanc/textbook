@@ -1,17 +1,18 @@
-import { logInUser } from "@/app/actions";
 import { auth } from "@/auth";
-import LoginButton from "@/components/LoginButton";
 import config from "@/utils/config";
 import { redirect } from "next/navigation";
+import { LoginForm } from "@/components/login-form";
 
-export default async function SignIn() {
+export default async function LoginPage() {
   const session = await auth();
 
   if (session) redirect(config.appRoute);
 
   return (
-    <form action={logInUser}>
-      <LoginButton />
-    </form>
+    <div className="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
+      <div className="w-full max-w-sm md:max-w-3xl">
+        <LoginForm />
+      </div>
+    </div>
   );
 }
