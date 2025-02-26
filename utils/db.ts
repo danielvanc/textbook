@@ -90,19 +90,26 @@ export function createSeedPosts() {
 }
 
 export async function getUsersPosts(userId: string) {
-  const [user, posts] = await Promise.all([
-    prisma.user.findUnique({
-      where: { id: userId },
-      select: { id: true, email: true, name: true },
-    }),
-    prisma.post.findMany({
-      where: { ownerId: userId },
-      select: { id: true, title: true, content: true },
-    }),
-  ]);
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      Post: {
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+    },
+  });
 
   // TODO: Add test coverage to ensure redirect happens
   if (!user) redirect("/login");
 
-  return { user, posts };
+  return { user, posts: user.Post };
 }
