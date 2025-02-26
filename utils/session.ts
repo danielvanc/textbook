@@ -7,7 +7,7 @@ export async function verifyUserSession() {
   const session = await auth();
   const userId = session?.user?.id;
 
-  if (!userId) redirect(config.loginRoute);
+  if (!session?.user || !userId) redirect(config.loginRoute);
 
-  return { session, userId };
+  return { session, userId, user: session.user };
 }

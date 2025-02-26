@@ -5,9 +5,8 @@ import { verifyUserSession } from "@/utils/session";
 import type React from "react";
 
 export default async function Page() {
-  const { session, userId } = await verifyUserSession();
+  const { user, userId } = await verifyUserSession();
   const { posts } = await getUsersPosts(userId);
-  const user = session.user as User;
 
   return (
     <div className="flex justify-between gap-4 p-4 min-h-[calc(100vh-4rem)]">

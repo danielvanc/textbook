@@ -13,8 +13,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { session } = await verifyUserSession();
-  const user = session.user as User;
+  const { user } = await verifyUserSession();
 
   return (
     <html lang="en">
