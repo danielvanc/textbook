@@ -2,6 +2,7 @@ export default function TwoColumn({
   children,
 }: React.PropsWithChildren<{ user: User }>) {
   return (
+    // TODO: Use nested pages for aside column
     <>
       <main className="flex flex-col gap-4 w-full xl:w-3/4">{children}</main>
       <aside className="hidden xl:flex flex-col gap-4 w-1/4">
