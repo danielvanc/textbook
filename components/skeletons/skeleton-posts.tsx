@@ -14,7 +14,7 @@ export default function SkeletonPosts({
             <div className="relative bg-gray-100 h-8 mb-4 w-24 rounded-lg bg-opacity-10"></div>
             <div className="relative bg-gray-100 h-8 mb-4 w-2/4 rounded-lg bg-opacity-10"></div>
             <div className="flex flex-row items-start mb-4 space-x-2  animate-pulse bg-opacity-10">
-              <div className="mx-auto h-40 mb-4 w-full rounded-lg bg-opacity-10 backdrop-filter backdrop-blur-lg shadow-md bg-gray-100">
+              <div className="mx-auto h-40 mb-4 w-full rounded-lg bg-opacity-10 backdrop-filter backdrop-blur-lg bg-gray-100">
                 &nbsp;
               </div>
             </div>
