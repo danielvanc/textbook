@@ -15,11 +15,5 @@ export default async function DashLayout({
 }>) {
   const { user } = await verifyUserSession();
 
-  return (
-    <html lang="en">
-      <body>
-        <Shell user={user}>{children}</Shell>
-      </body>
-    </html>
-  );
+  return <Shell user={user}>{children}</Shell>;
 }
