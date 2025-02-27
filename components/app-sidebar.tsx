@@ -125,7 +125,7 @@ export function AppSidebar({
         <SidebarHeader className="gap-3.5 border-b px-4 py-5">
           <div className="flex w-full items-center justify-between">
             <div className="text-foreground text-base font-medium">
-              My bookmarks
+              Bookmarks
             </div>
             <Label className="flex items-center gap-2 text-sm">
               <span>Unreads</span>
