@@ -6,10 +6,14 @@ export const metadata: Metadata = {
   description: "",
 };
 
-export default function MarketingLayout({
+export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  return <div className="p-5">{children}</div>;
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
 }
