@@ -1,10 +1,4 @@
-import type { Metadata } from "next";
 import "@/app/globals.css";
-
-export const metadata: Metadata = {
-  title: "Textbook - Logged in!",
-  description: "",
-};
 
 export default async function IndexLayout({
   children,
