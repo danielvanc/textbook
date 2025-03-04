@@ -1,4 +1,5 @@
 import { createSeedPosts, createSingleUser, prisma } from "@/utils/db";
+import { generateSlug } from "@/utils/posts";
 
 async function seed() {
   console.log("🌱 Seeding...");
@@ -12,27 +13,43 @@ async function seed() {
     await prisma.user.delete({ where: { id: user.id } });
   }
 
-  await prisma.user.create({
-    data: {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      image: user.image,
-      accounts: {
-        create: {
-          provider: user.provider,
-          providerAccountId: user?.providerAccountId ?? "",
-          access_token: user?.providerAccountToken ?? "",
-          token_type: user.tokenType,
-          scope: user.scope,
-          id_token: user.idToken,
-          type: user.type,
+  prisma.$transaction(async (tx) => {
+    const entry = await prisma.user.create({
+      data: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        image: user.image,
+        accounts: {
+          create: {
+            provider: user.provider,
+            providerAccountId: user?.providerAccountId ?? "",
+            access_token: user?.providerAccountToken ?? "",
+            token_type: user.tokenType,
+            scope: user.scope,
+            id_token: user.idToken,
+            type: user.type,
+          },
+        },
+        Post: {
+          create: [...createSeedPosts()],
         },
       },
-      Post: {
-        create: [...createSeedPosts()],
+    });
+
+    const posts = await tx.post.findMany({
+      where: {
+        ownerId: entry.id,
       },
-    },
+    });
+
+    for (const post of posts) {
+      const slug = generateSlug(post.title, post.id);
+      await tx.post.update({
+        where: { id: post.id },
+        data: { slug },
+      });
+    }
   });
 
   console.timeEnd(`👤 Created new user ${user.name} in the database!`);

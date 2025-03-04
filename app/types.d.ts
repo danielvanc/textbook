@@ -10,4 +10,5 @@ interface Post {
   title: string;
   content: string;
   createdAt: Date;
+  slug: string | null;
 }

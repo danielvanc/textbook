@@ -1,5 +1,7 @@
 import { format } from "date-fns";
 import Image from "next/image";
+import { generateHTML } from "@tiptap/html";
+import StarterKit from "@tiptap/starter-kit";
 
 export default function AllUserPosts({
   user,
@@ -8,8 +10,14 @@ export default function AllUserPosts({
   posts: Post[];
   user: User;
 }) {
-  return posts.map((post) => {
+  const sortedPostsDesc = posts.sort((a, b) => {
+    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+  });
+  return sortedPostsDesc.map((post) => {
     const formattedDate = format(post.updatedAt, "dd MMM, yyyy");
+
+    const content = generateHTML(JSON.parse(post.content), [StarterKit]);
+
     return (
       <article
         key={post.id}
@@ -20,14 +28,15 @@ export default function AllUserPosts({
         </time>
         <div className="group relative">
           <h3 className="mt-3 text-3xl/8 font-semibold text-gray-900 group-hover:text-gray-600">
-            <a href="#">
+            <a href={`/home/posts/${post.slug}`}>
               <span className="absolute inset-0" />
               {post.title}
             </a>
           </h3>
-          <p className="mt-5 line-clamp-3 text-lg/6 text-gray-600">
-            {post.content}
-          </p>
+          <div
+            className="mt-5 line-clamp-3 text-lg/6 text-gray-600"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
         </div>
         <div className="relative mt-8 flex items-center gap-x-4">
           {user.image && (

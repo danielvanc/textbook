@@ -24,24 +24,26 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Switch } from "@/components/ui/switch";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const data = {
   navMain: [
     {
       title: "New post",
-      url: "#",
+      url: "/home/posts/new",
       icon: File,
       isActive: false,
     },
     {
       title: "My posts",
-      url: "#",
+      url: "/home/posts",
       icon: Library,
       isActive: true,
     },
     {
       title: "Feed",
-      url: "#",
+      url: "/home",
       icon: BookOpenText,
       isActive: true,
     },
@@ -59,7 +61,8 @@ export function AppSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar> & { user: User }) {
   // TODO: use the url/router to set active item
-  const [activeItem, setActiveItem] = React.useState(data.navMain[0]);
+  const router = useRouter();
+  const [activeItem, setActiveItem] = React.useState(data.navMain[2]);
   const { setOpen } = useSidebar();
 
   return (
@@ -76,15 +79,14 @@ export function AppSidebar({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
-                <a href="#">
+                <Link href="/home">
                   <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                     <House className="size-4" />
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">Acme Inc</span>
-                    <span className="truncate text-xs">Enterprise</span>
+                    <span className="truncate font-medium">Textbook</span>
                   </div>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -103,6 +105,7 @@ export function AppSidebar({
                       onClick={() => {
                         setActiveItem(item);
                         setOpen(true);
+                        router.push(item.url);
                       }}
                       isActive={activeItem.title === item.title}
                       className="px-2.5 md:px-2"
