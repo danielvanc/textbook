@@ -37,7 +37,6 @@ export default function AllUserPosts({
             className="mt-5 line-clamp-3 text-lg/6 text-gray-600"
             dangerouslySetInnerHTML={{ __html: content }}
           />
-          {/* <p className="mt-5 line-clamp-3 text-lg/6 text-gray-600">{content}</p> */}
         </div>
         <div className="relative mt-8 flex items-center gap-x-4">
           {user.image && (
