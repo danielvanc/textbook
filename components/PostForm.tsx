@@ -1,17 +1,25 @@
 "use client";
 import Editor from "@/components/editor";
 import Form from "next/form";
+import { useActionState } from "react";
 
-interface PostFormProps {
+type PostFormProps = {
   userId: string;
-  action: (formData: FormData) => Promise<void>
-  children: React.ReactNode
-}
+  action: (formData: FormData) => Promise<{ message: string }>;
+  children: React.ReactNode;
+};
 
-export default function PostForm({ userId, action, children }:PostFormProps) {
+const initialState = {
+  message: '',
+}
+export default function PostForm({ userId, action, children }: PostFormProps) {
+  const [state, formAction] = useActionState(
+    (state: { message: string }, formData: FormData) => action(formData),
+    initialState
+  );
   return (
     <Form
-      action={action}
+      action={formAction}
       className="flex flex-col gap-y-4 [&>p]:flex gap-4 [&>p]:justify-between [&>label]: [&>p>input]:border-1 [&>p>input]:p-2"
     >
       <input type="hidden" name="userId" defaultValue={userId} />
@@ -42,6 +50,7 @@ export default function PostForm({ userId, action, children }:PostFormProps) {
         </label>
       </p> */}
       <Editor />
+      {state?.message && <p className="text-red-500">{state.message}</p>}
       {children}
     </Form>
   );

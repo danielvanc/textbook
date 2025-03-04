@@ -7,11 +7,11 @@ const extensions = [
   StarterKit.configure({
     bulletList: {
       keepMarks: true,
-      keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+      keepAttributes: false, 
     },
     orderedList: {
       keepMarks: true,
-      keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+      keepAttributes: false,
     },
   }),
 ];
@@ -175,7 +175,7 @@ export default function TTEditor() {
       </label>
       <MenuBar editor={editor} />
       <EditorContent editor={editor} />
-      <input type="hidden" name="content" value={JSON.stringify(json)} />
+      <input type="hidden" name="content" defaultValue={JSON.stringify(json)} />
     </div>
   );
 }

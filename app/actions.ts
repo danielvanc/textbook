@@ -27,6 +27,12 @@ export async function createPost(formData: FormData) {
     });
   } catch (error) {
     console.error(error);
+    // TODO: Make less generic
+    if (error instanceof Error) {
+      return { message: error.message };
+    }
+    return { message: "Failed to create post" };
   }
+
   redirect("/home/posts");
 }
