@@ -28,7 +28,7 @@ export default function AllUserPosts({
         </time>
         <div className="group relative">
           <h3 className="mt-3 text-3xl/8 font-semibold text-gray-900 group-hover:text-gray-600">
-            <a href="#">
+            <a href={`/home/posts/${post.slug}`}>
               <span className="absolute inset-0" />
               {post.title}
             </a>

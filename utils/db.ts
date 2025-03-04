@@ -114,6 +114,7 @@ export async function getUsersPosts(userId: string) {
         select: {
           id: true,
           title: true,
+          slug: true,
           content: true,
           createdAt: true,
           updatedAt: true,
