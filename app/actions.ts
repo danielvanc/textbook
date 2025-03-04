@@ -2,6 +2,7 @@
 import { signIn, signOut } from "@/auth";
 import config from "@/utils/config";
 import { prisma } from "@/utils/db";
+import { generateSlug } from "@/utils/posts";
 import { redirect } from "next/navigation";
 
 export async function logInUser() {
@@ -18,12 +19,26 @@ export async function createPost(formData: FormData) {
   const content = String(formData.get("content"));
 
   try {
-    await prisma.post.create({
-      data: {
-        title,
-        content,
-        ownerId: userId,
-      },
+    await prisma.$transaction(async (tx) => {
+      const post = await tx.post.create({
+        data: {
+          title,
+          content,
+          ownerId: userId,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      const slug = generateSlug(title, post.id);
+
+      await tx.post.update({
+        where: { id: post.id },
+        data: {
+          slug,
+        },
+      });
     });
   } catch (error) {
     console.error(error);
