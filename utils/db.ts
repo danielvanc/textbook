@@ -71,20 +71,34 @@ export function createSingleUser() {
   };
 }
 
+const content = JSON.stringify({
+  type: "doc",
+  content: [
+    {
+      type: "paragraph",
+      content: [{ type: "text", text: "Hello World! 🌎️" }],
+    },
+    { type: "paragraph" },
+    {
+      type: "paragraph",
+      content: [{ type: "text", text: "I hope that this works out nicely" }],
+    },
+  ],
+});
+
 export function createSeedPosts() {
   return [
     {
       title: "First Post",
-      content:
-        "This is your first note! You can write anything you want here. Click the edit button to start writing.",
+      content,
     },
     {
       title: "Second Post",
-      content: "More text",
+      content,
     },
     {
       title: "Third Post",
-      content: "More text",
+      content,
     },
   ];
 }

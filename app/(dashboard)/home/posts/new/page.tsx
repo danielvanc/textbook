@@ -1,13 +1,13 @@
 import { verifyUserSession } from "@/utils/session";
-import PostEditor from "@/components/editorParent";
+import PostForm from "@/components/PostForm";
 
 export default async function NewPost() {
-  await verifyUserSession();
+  const { userId } = await verifyUserSession();
 
   return (
-    <div>
-      <h1>New Post</h1>
-      <PostEditor />
+    <div className="max-w-3xl mx-auto py-4 px-2 lg:p-6">
+      <h1 className="mb-8">New Post</h1>
+      <PostForm userId={userId} />
     </div>
   );
 }
