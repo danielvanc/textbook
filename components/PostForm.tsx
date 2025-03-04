@@ -1,13 +1,17 @@
 "use client";
 import Editor from "@/components/editor";
-import { Button } from "./ui/button";
 import Form from "next/form";
-import { createPost } from "@/app/actions";
 
-export default function PostForm({ userId }: { userId: string }) {
+interface PostFormProps {
+  userId: string;
+  action: (formData: FormData) => Promise<void>
+  children: React.ReactNode
+}
+
+export default function PostForm({ userId, action, children }:PostFormProps) {
   return (
     <Form
-      action={createPost}
+      action={action}
       className="flex flex-col gap-y-4 [&>p]:flex gap-4 [&>p]:justify-between [&>label]: [&>p>input]:border-1 [&>p>input]:p-2"
     >
       <input type="hidden" name="userId" defaultValue={userId} />
@@ -38,7 +42,7 @@ export default function PostForm({ userId }: { userId: string }) {
         </label>
       </p> */}
       <Editor />
-      <Button className="w-[120px] cursor-pointer">Publish</Button>
+      {children}
     </Form>
   );
 }
