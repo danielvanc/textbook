@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import chalk from "chalk";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 const prismaClientSingleton = () => {
   // Feel free to change this log threshold to something that makes sense for you
@@ -127,4 +127,47 @@ export async function getUsersPosts(userId: string) {
   if (!user) redirect("/login");
 
   return { user, posts: user.Post };
+}
+
+export async function getPost(
+  slug: string
+): Promise<{ post: Post; user: User }> {
+  try {
+    const data = await prisma.post.findUnique({
+      where: { slug },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        content: true,
+        createdAt: true,
+        updatedAt: true,
+        owner: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+      },
+    });
+
+    if (!data) notFound();
+
+    return {
+      post: {
+        id: data.id,
+        title: data.title,
+        slug: data.slug,
+        content: data.content,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+      },
+      user: data.owner,
+    };
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to get post");
+  }
 }

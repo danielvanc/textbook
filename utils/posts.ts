@@ -10,3 +10,19 @@ export function generateSlug(str: string, id: string) {
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-");
 }
+
+export function formatDate(date: Date) {
+  return date
+    .toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+    })
+    .replace(/(\d{2}) /, "$1, "); // Add comma after day
+}
+
+export function sortPostsByDateDesc(posts: Post[]) {
+  return posts.sort((a, b) => {
+    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+  });
+}
