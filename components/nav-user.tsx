@@ -20,13 +20,18 @@ import {
 } from "@/components/ui/sidebar";
 
 import { logOutUser } from "@/app/actions";
+import { type User } from "@prisma/client";
 
 function logUserOut(event: React.FormEvent<HTMLFormElement>) {
   event.preventDefault();
   logOutUser();
 }
 
-export function NavUser({ user }: { user: User }) {
+interface NavUserProps {
+  user: Pick<User, "id" | "name" | "email" | "image">;
+}
+
+export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar();
 
   return (

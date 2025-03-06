@@ -1,6 +1,7 @@
 import { formatDate } from "@/utils/posts";
 import { generateHTML } from "@tiptap/html";
 import StarterKit from "@tiptap/starter-kit";
+import { type User, type Post } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,8 +9,8 @@ export default function PostFullView({
   post,
   user,
 }: {
-  post: Post;
-  user: User;
+  post: Omit<Post, "ownerId">;
+  user: Pick<User, "id" | "name" | "email" | "image">;
 }) {
   const formattedDate = formatDate(post.updatedAt);
   const content = generateHTML(JSON.parse(post.content), [StarterKit]);
