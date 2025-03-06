@@ -10,6 +10,11 @@ interface AllUserPostsProps {
 export default function AllUserPosts({ user, posts }: AllUserPostsProps) {
   // TODO: Update to use PostShortView component
   return sortPostsByDateDesc(posts).map((post) => (
-    <PostFullView key={post.id} post={post} user={user} />
+    <PostFullView
+      key={post.id}
+      post={post}
+      user={user}
+      slug={post.slug as string}
+    />
   ));
 }
