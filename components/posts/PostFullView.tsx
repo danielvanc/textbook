@@ -24,7 +24,7 @@ export default function PostFullView({
       </time>
       <div className="group relative">
         <h3 className="mt-3 text-3xl/8 font-semibold text-gray-900 group-hover:text-gray-600">
-          <Link href={`/home/posts/${post.slug}`} prefetch={true}>
+          <Link href={`/home/posts/${post.slug}`} prefetch={false}>
             <span className="absolute inset-0" />
             {post.title}
           </Link>
