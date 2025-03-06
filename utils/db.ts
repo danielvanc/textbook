@@ -5,11 +5,17 @@ import { withOptimize } from "@prisma/extension-optimize";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { notFound, redirect } from "next/navigation";
 
-export const prisma = remember("prisma", () =>
-  new PrismaClient()
-    .$extends(withOptimize({ apiKey: process.env.OPTIMIZE_API_KEY! }))
-    .$extends(withAccelerate())
-);
+const isProd = process.env.NODE_ENV === "production";
+
+const generateClient = () => {
+  return isProd
+    ? new PrismaClient().$extends(withAccelerate())
+    : new PrismaClient()
+        .$extends(withOptimize({ apiKey: process.env.OPTIMIZE_API_KEY! }))
+        .$extends(withAccelerate());
+};
+
+export const prisma = remember("prisma", generateClient);
 
 export const authAdapter = PrismaAdapter(prisma);
 
