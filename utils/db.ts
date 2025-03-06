@@ -1,44 +1,22 @@
 import { remember } from "@epic-web/remember";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, type User, type Post } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
-import chalk from "chalk";
+import { withOptimize } from "@prisma/extension-optimize";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
-const prismaClientSingleton = () => {
-  // Feel free to change this log threshold to something that makes sense for you
-  const logThreshold = 20;
+const isProd = process.env.NODE_ENV === "production";
 
-  const client = new PrismaClient({
-    log: [
-      { level: "query", emit: "event" },
-      { level: "error", emit: "stdout" },
-      { level: "warn", emit: "stdout" },
-    ],
-  });
-
-  client.$on("query", async (e) => {
-    if (e.duration < logThreshold) return;
-    const color =
-      e.duration < logThreshold * 1.1
-        ? "green"
-        : e.duration < logThreshold * 1.2
-        ? "blue"
-        : e.duration < logThreshold * 1.3
-        ? "yellow"
-        : e.duration < logThreshold * 1.4
-        ? "redBright"
-        : "red";
-    const dur = chalk[color](`${e.duration}ms`);
-    console.info(`prisma:query - ${dur} - ${e.query}`);
-  });
-  client.$extends(withAccelerate());
-
-  void client.$connect();
-  return client;
+const generateClient = () => {
+  return isProd
+    ? new PrismaClient().$extends(withAccelerate())
+    : new PrismaClient()
+        .$extends(withOptimize({ apiKey: process.env.OPTIMIZE_API_KEY! }))
+        .$extends(withAccelerate());
 };
 
-export const prisma = remember("prisma", prismaClientSingleton);
+export const prisma = remember("prisma", generateClient);
+
 export const authAdapter = PrismaAdapter(prisma);
 
 export function createSingleUser() {
@@ -105,6 +83,10 @@ export function createSeedPosts() {
 
 export async function getUsersPosts(userId: string) {
   const user = await prisma.user.findUnique({
+    cacheStrategy: {
+      swr: 120,
+      ttl: 120,
+    },
     where: { id: userId },
     select: {
       id: true,
@@ -127,4 +109,52 @@ export async function getUsersPosts(userId: string) {
   if (!user) redirect("/login");
 
   return { user, posts: user.Post };
+}
+
+export async function getPost(slug: string): Promise<{
+  post: Omit<Post, "ownerId">;
+  user: Pick<User, "id" | "name" | "email" | "image">;
+}> {
+  try {
+    const data = await prisma.post.findUnique({
+      cacheStrategy: {
+        swr: 240,
+        ttl: 240,
+      },
+      where: { slug },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        content: true,
+        createdAt: true,
+        updatedAt: true,
+        owner: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+      },
+    });
+
+    if (!data) notFound();
+
+    return {
+      post: {
+        id: data.id,
+        title: data.title,
+        slug: data.slug,
+        content: data.content,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+      },
+      user: data.owner,
+    };
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to get post");
+  }
 }

@@ -6,11 +6,14 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { type User } from "@prisma/client";
 
-export default function Shell({
-  user,
-  children,
-}: React.PropsWithChildren<{ user: User }>) {
+interface ShellProps {
+  user: Pick<User, "id" | "name" | "email" | "image">;
+  children: React.ReactNode;
+}
+
+export default function Shell({ user, children }: ShellProps) {
   return (
     <SidebarProvider
       style={

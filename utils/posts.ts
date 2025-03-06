@@ -1,3 +1,5 @@
+import { type Post } from "@prisma/client";
+
 export function generateSlug(str: string, id: string) {
   const trimmedId = id.slice(-5);
   const stringToSlug = `${trimmedId}-${str}`;
@@ -9,4 +11,20 @@ export function generateSlug(str: string, id: string) {
     .replace(/[^\w\s-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-");
+}
+
+export function formatDate(date: Date) {
+  return date
+    .toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+    })
+    .replace(/(\d{2}) /, "$1, "); // Add comma after day
+}
+
+export function sortPostsByDateDesc(posts: Omit<Post, "ownerId">[]) {
+  return posts.sort((a, b) => {
+    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+  });
 }

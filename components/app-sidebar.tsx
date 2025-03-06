@@ -26,6 +26,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { type User } from "@prisma/client";
 
 const data = {
   navMain: [
@@ -59,7 +60,9 @@ const data = {
 export function AppSidebar({
   user,
   ...props
-}: React.ComponentProps<typeof Sidebar> & { user: User }) {
+}: React.ComponentProps<typeof Sidebar> & {
+  user: Pick<User, "id" | "name" | "email" | "image">;
+}) {
   // TODO: use the url/router to set active item
   const router = useRouter();
   const [activeItem, setActiveItem] = React.useState(data.navMain[2]);

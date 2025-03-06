@@ -1,3 +1,5 @@
+import { type User } from "@prisma/client";
+
 export default function TwoColumn({
   children,
 }: React.PropsWithChildren<{ user: User }>) {
