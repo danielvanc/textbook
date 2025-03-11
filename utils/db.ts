@@ -5,7 +5,7 @@ import { PrismaClient, type User, type Post } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { withOptimize } from "@prisma/extension-optimize";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -51,10 +51,13 @@ export async function getUsersPosts(userId: string) {
   return { user, posts: user.Post };
 }
 
-export async function getPost(slug: string): Promise<{
-  post: Omit<Post, "ownerId">;
-  user: Pick<User, "id" | "name" | "email" | "image">;
-}> {
+export async function getPost(slug: string): Promise<
+  | {
+      post: Post;
+      user: Pick<User, "id" | "name" | "email" | "image">;
+    }
+  | undefined
+> {
   try {
     const data = await prisma.post.findUnique({
       cacheStrategy: {
@@ -80,7 +83,9 @@ export async function getPost(slug: string): Promise<{
       },
     });
 
-    if (!data) notFound();
+    if (!data) {
+      return undefined;
+    }
 
     return {
       post: {
@@ -90,11 +95,11 @@ export async function getPost(slug: string): Promise<{
         content: data.content,
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
+        ownerId: data.owner.id,
       },
       user: data.owner,
     };
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to get post");
   }
 }

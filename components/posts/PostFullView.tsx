@@ -4,9 +4,11 @@ import StarterKit from "@tiptap/starter-kit";
 import { type User, type Post } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
+import { useId } from "react";
+import EditableTitle from "./EditableTitle";
 
 interface PostFullViewProps {
-  post: Omit<Post, "ownerId">;
+  post: Post;
   user: Pick<User, "id" | "name" | "email" | "image">;
   slug?: string;
 }
@@ -14,22 +16,19 @@ interface PostFullViewProps {
 export default function PostFullView({ post, user, slug }: PostFullViewProps) {
   const formattedDate = formatDate(post.updatedAt);
   const content = generateHTML(JSON.parse(post.content), [StarterKit]);
+  const buttonId = useId();
+  // const isEditable = !slug ? post.ownerId === user.id : false;
 
-  function Title({ slug }: { slug: PostFullViewProps["slug"] }) {
-    return (
+  function Title() {
+    return slug ? (
       <h3 className="mt-3 text-3xl/8 font-semibold text-gray-900">
-        {slug ? (
-          <Link
-            href={`/home/posts/${post.slug}`}
-            className="hover:text-gray-600"
-          >
-            <span className="absolute inset-0" />
-            {post.title}
-          </Link>
-        ) : (
-          post.title
-        )}
+        <Link href={`/home/posts/${post.slug}`} className="hover:text-gray-600">
+          <span className="absolute inset-0" />
+          {post.title}
+        </Link>
       </h3>
+    ) : (
+      <EditableTitle title={post.title} id={buttonId} postId={post.id} />
     );
   }
 
@@ -42,7 +41,10 @@ export default function PostFullView({ post, user, slug }: PostFullViewProps) {
         {formattedDate}
       </time>
       <div className="group relative">
-        <Title slug={slug} />
+        <header>
+          <Title />
+          {/* {isEditable && <button>Edit Post</button>} */}
+        </header>
         <div
           className="mt-5 line-clamp-3 text-lg/6 text-gray-600"
           dangerouslySetInnerHTML={{ __html: content }}
