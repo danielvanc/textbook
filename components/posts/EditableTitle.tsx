@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 import { flushSync } from "react-dom";
+import { toast } from "sonner";
 
 const initialState = {
   message: "",
@@ -45,7 +46,11 @@ export default function EditableTitle({
     if (!isEditing && state?.postSlug) {
       window.history.replaceState(null, "", `/home/posts/${state.postSlug}`);
     }
-  }, [isEditing, state.postSlug, state.error, router]);
+
+    if (state?.message && state?.postSlug) {
+      toast(state.message);
+    }
+  }, [isEditing, state.postSlug, state.error, router, state.message]);
 
   return (
     <>
@@ -111,10 +116,8 @@ export default function EditableTitle({
           </button>
         )}
       </h3>
-      {state?.message && (
-        <p className={`${state.error ? "text-red-500" : "text-green-500"}`}>
-          {state.message}
-        </p>
+      {state?.message && state?.error && (
+        <p className="text-red-500">{state.message}</p>
       )}
     </>
   );
