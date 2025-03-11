@@ -1,124 +1,56 @@
 "use client";
 
-import { updatePostTitle } from "@/app/actions";
+import useEditableFields from "@/hooks/use-editableFields";
 import Form from "next/form";
-import { useRouter } from "next/navigation";
-import {
-  startTransition,
-  useActionState,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { flushSync } from "react-dom";
-import { toast } from "sonner";
-
-const initialState = {
-  message: "",
-  error: false,
-  postSlug: "",
-};
+import Spinner from "../icons/spinner";
+import { updatePostTitle as action } from "@/app/actions";
 
 export default function EditableTitle({
-  id,
   title,
   postId,
 }: {
-  id: string;
   title: string;
   postId: string;
 }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [newTitle, setNewTitle] = useState(title);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const router = useRouter();
-
-  const [state, formAction] = useActionState(
-    (
-      state: { message: string; error: boolean; postSlug?: string },
-      formData: FormData
-    ) => updatePostTitle(formData),
-    initialState
-  );
-
-  useEffect(() => {
-    if (!isEditing && state?.postSlug) {
-      window.history.replaceState(null, "", `/home/posts/${state.postSlug}`);
-    }
-
-    if (state?.message && state?.postSlug) {
-      toast(state.message);
-    }
-  }, [isEditing, state.postSlug, state.error, router, state.message]);
+  const {
+    state,
+    isPending,
+    isEditing,
+    value,
+    getFormProps,
+    getFieldProps,
+    getButtonProps,
+  } = useEditableFields({ action, initialValue: title });
 
   return (
     <>
       <h3 className="mt-3 text-3xl/8 font-semibold text-gray-900">
         {isEditing ? (
-          <Form
-            action={formAction}
-            onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
-              event.preventDefault();
-              const formData = new FormData(event.currentTarget);
-              flushSync(() => {
-                setNewTitle(inputRef.current?.value ?? "");
-                setIsEditing(false);
-              });
-              buttonRef.current?.focus();
-              startTransition(() => {
-                formAction(formData);
-              });
-              console.log("Submitted!");
-            }}
-          >
+          <Form {...getFormProps()}>
             <input
-              required
-              ref={inputRef}
-              type="text"
-              defaultValue={newTitle}
-              id={id}
-              name="title"
-              aria-label="Edit title input"
-              placeholder="Update title"
-              className="w-full"
-              onKeyDown={(event) => {
-                if (event.key === "Escape") {
-                  flushSync(() => {
-                    setIsEditing(false);
-                  });
-                  buttonRef.current?.focus();
-                }
-              }}
-              onBlur={(event) => {
-                flushSync(() => {
-                  setNewTitle(event.currentTarget.value);
-                  setIsEditing(false);
-                });
-                buttonRef.current?.focus();
-              }}
+              {...getFieldProps({
+                className: "w-full",
+              })}
             />
             <input type="hidden" name="postId" value={postId} />
           </Form>
         ) : (
-          <button
-            aria-label="Edit title button"
-            type="button"
-            ref={buttonRef}
-            onClick={() => {
-              flushSync(() => {
-                setIsEditing(true);
-              });
-              inputRef.current?.select();
-            }}
-          >
-            {newTitle}
-          </button>
+          <div className="flex items-center text-left gap-x-2 relative">
+            {isPending && (
+              <span className="absolute -left-6">
+                <Spinner />
+              </span>
+            )}
+            <button
+              {...getButtonProps({ className: "w-3/4 text-left" })}
+              disabled={isPending}
+            >
+              {value}
+            </button>
+          </div>
         )}
       </h3>
-      {state?.message && state?.error && (
-        <p className="text-red-500">{state.message}</p>
-      )}
+      {state?.error && <p className="text-red-500">{state.message}</p>}
     </>
   );
 }

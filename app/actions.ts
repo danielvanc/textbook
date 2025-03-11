@@ -52,7 +52,10 @@ export async function createPost(formData: FormData) {
   redirect("/home/posts");
 }
 
-export async function updatePostTitle(formData: FormData) {
+export async function updatePostTitle(
+  prevState: EditableStateProps,
+  formData: FormData
+) {
   const postId = String(formData.get("postId"));
   const title = String(formData.get("title"));
   const slug = generateSlug(title, postId);
@@ -66,9 +69,19 @@ export async function updatePostTitle(formData: FormData) {
       },
     });
 
-    return { message: "Successfully updated!", postSlug: slug, error: false };
+    return {
+      message: "Successfully updated!",
+      postSlug: slug,
+      error: false,
+      completed: true,
+    };
   } catch (error) {
     console.error(error);
-    return { message: "Error updating title!", postSlug: "", error: true };
+    return {
+      message: "Error updating title!",
+      postSlug: "",
+      error: true,
+      completed: false,
+    };
   }
 }

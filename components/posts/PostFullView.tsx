@@ -4,7 +4,6 @@ import StarterKit from "@tiptap/starter-kit";
 import { type User, type Post } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-import { useId } from "react";
 import EditableTitle from "./EditableTitle";
 
 interface PostFullViewProps {
@@ -16,7 +15,6 @@ interface PostFullViewProps {
 export default function PostFullView({ post, user, slug }: PostFullViewProps) {
   const formattedDate = formatDate(post.updatedAt);
   const content = generateHTML(JSON.parse(post.content), [StarterKit]);
-  const buttonId = useId();
   // const isEditable = !slug ? post.ownerId === user.id : false;
 
   function Title() {
@@ -28,7 +26,7 @@ export default function PostFullView({ post, user, slug }: PostFullViewProps) {
         </Link>
       </h3>
     ) : (
-      <EditableTitle title={post.title} id={buttonId} postId={post.id} />
+      <EditableTitle title={post.title} postId={post.id} />
     );
   }
 
