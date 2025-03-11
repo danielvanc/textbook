@@ -40,6 +40,7 @@ export async function getUsersPosts(userId: string) {
           content: true,
           createdAt: true,
           updatedAt: true,
+          ownerId: true,
         },
       },
     },

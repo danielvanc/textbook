@@ -23,7 +23,7 @@ export function formatDate(date: Date) {
     .replace(/(\d{2}) /, "$1, "); // Add comma after day
 }
 
-export function sortPostsByDateDesc(posts: Omit<Post, "ownerId">[]) {
+export function sortPostsByDateDesc(posts: Post[]) {
   return posts.sort((a, b) => {
     return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
   });
