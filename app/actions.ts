@@ -51,3 +51,24 @@ export async function createPost(formData: FormData) {
 
   redirect("/home/posts");
 }
+
+export async function updatePostTitle(formData: FormData) {
+  const postId = String(formData.get("postId"));
+  const title = String(formData.get("title"));
+  const slug = generateSlug(title, postId);
+
+  try {
+    await prisma.post.update({
+      where: { id: postId },
+      data: {
+        title,
+        slug,
+      },
+    });
+
+    return { message: "Successfully updated!", postSlug: slug, error: false };
+  } catch (error) {
+    console.error(error);
+    return { message: "Error updating title!", postSlug: "", error: true };
+  }
+}
