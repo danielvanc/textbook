@@ -187,8 +187,10 @@ function MenuBar({ editor }: { editor: Editor | null }) {
 
 interface EditorProps {
   onBlur?: (params: { event: FocusEvent }) => void;
+  onKeyDown?: (event: KeyboardEvent) => void;
   formRef: React.RefObject<HTMLFormElement>;
   ref?: React.Ref<HTMLInputElement>;
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function TTEditor<Props>({
@@ -209,12 +211,28 @@ export default function TTEditor<Props>({
       attributes: {
         class: "min-h-24 border-t-2 pt-6 pb-2 border-gray-200 ",
       },
+      handleDOMEvents: {
+        keydown: (view, event) => {
+          if (
+            props &&
+            typeof props === "object" &&
+            "onKeyDown" in props &&
+            props.onKeyDown
+          ) {
+            setSubmitForm(false);
+            setData(content);
+            props.onKeyDown(event);
+          }
+          return false;
+        },
+      },
       ...props,
     },
     onUpdate: ({ editor }) => {
       const json = editor?.getJSON();
       const valueAsString = JSON.stringify(json);
       const newData = formatValue(valueAsString);
+
       if (data === newData) {
         setSubmitForm(false);
         return;
@@ -226,7 +244,14 @@ export default function TTEditor<Props>({
     onBlur:
       props && typeof props === "object" && "onBlur" in props && props.formRef
         ? ({ event }) => {
-            if (event.relatedTarget || !submitForm) return;
+            if (!event.relatedTarget && !submitForm) {
+              setData(content);
+              setSubmitForm(false);
+              props.setIsEditing(false);
+              return;
+            }
+            if (event.relatedTarget || !submitForm || !props.formRef.current)
+              return;
 
             props.formRef.current.requestSubmit();
           }

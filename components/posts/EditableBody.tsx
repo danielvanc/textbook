@@ -28,7 +28,7 @@ export default function EditableBody({
 
   return (
     <>
-      <h3 className="mt-3 text-3xl/8 font-semibold text-gray-900">
+      <div className="text-3xl/8 font-semibold text-gray-900">
         {isEditing ? (
           <Form {...getFormProps()}>
             <p>
@@ -55,7 +55,7 @@ export default function EditableBody({
         ) : (
           <div className="flex items-center text-left gap-x-2 relative">
             {isPending && (
-              <span className="absolute -left-8 top-5">
+              <span className="absolute -left-8">
                 <Spinner />
               </span>
             )}
@@ -64,7 +64,7 @@ export default function EditableBody({
               disabled={isPending}
             >
               <div
-                className="mt-5 line-clamp-3 text-lg/6 text-gray-600"
+                className="line-clamp-3 text-lg/6 text-gray-600"
                 dangerouslySetInnerHTML={{
                   __html: postContent,
                 }}
@@ -72,7 +72,7 @@ export default function EditableBody({
             </button>
           </div>
         )}
-      </h3>
+      </div>
       {state?.error && <p className="text-red-500">{state.message}</p>}
     </>
   );

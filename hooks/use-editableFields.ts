@@ -162,13 +162,11 @@ export default function useEditableFields({
       onBlur: (
         event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
       ) => {
+        const content = generateHTML(JSON.parse(event.currentTarget.value), [
+          StarterKit,
+        ]);
+
         flushSync(() => {
-          const content = generateHTML(JSON.parse(event.currentTarget.value), [
-            StarterKit,
-          ]);
-
-          console.log("content being sent", content);
-
           setValue(content);
           setIsEditing(false);
         });

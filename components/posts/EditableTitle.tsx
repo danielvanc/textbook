@@ -24,7 +24,7 @@ export default function EditableTitle({
 
   return (
     <>
-      <h3 className="mt-3 text-3xl/8 font-semibold text-gray-900">
+      <h3 className="mt-3 mb-8 text-3xl/8 font-semibold text-gray-900">
         {isEditing ? (
           <Form {...getFormProps()}>
             <p>

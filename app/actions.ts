@@ -91,12 +91,13 @@ export async function updatePostBody(
   formData: FormData
 ) {
   const postId = String(formData.get("postId"));
-  const content = String(formData.get("content")); // changed variable name to content
+  const content = String(formData.get("content"));
+
   try {
     await prisma.post.update({
       where: { id: postId },
       data: {
-        content, // updated data to include content
+        content,
       },
       select: {
         slug: true,

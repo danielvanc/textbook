@@ -5,13 +5,13 @@ import Link from "next/link";
 import EditableTitle from "./EditableTitle";
 import EditableBody from "./EditableBody";
 
-interface PostFullViewProps {
+interface PostFullProps {
   post: Post;
   user: Pick<User, "id" | "name" | "email" | "image">;
   slug?: string;
 }
 
-export default function PostFullView({ post, user, slug }: PostFullViewProps) {
+export default function PostFullView({ post, user, slug }: PostFullProps) {
   const formattedDate = formatDate(post.updatedAt);
   const content = formatValue(post.content);
   const isEditable = !slug ? post.ownerId === user.id : false;
