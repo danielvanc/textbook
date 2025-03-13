@@ -70,7 +70,7 @@ export async function updatePostTitle(
     });
 
     return {
-      message: "Successfully updated the title!",
+      message: "Title was successfully updated!",
       postSlug: slug,
       error: false,
       completed: true,
@@ -107,7 +107,7 @@ export async function updatePostBody(
     });
 
     return {
-      message: "Successfully updated the content!",
+      message: "Content was successfully updated!",
       error: false,
       completed: true,
     };
