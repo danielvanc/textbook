@@ -16,7 +16,7 @@ interface PostFullViewProps {
 export default function PostFullView({ post, user, slug }: PostFullViewProps) {
   const formattedDate = formatDate(post.updatedAt);
   const content = generateHTML(JSON.parse(post.content), [StarterKit]);
-  // const isEditable = !slug ? post.ownerId === user.id : false;
+  const isEditable = !slug ? post.ownerId === user.id : false;
 
   function Title() {
     return slug ? (
@@ -43,41 +43,45 @@ export default function PostFullView({ post, user, slug }: PostFullViewProps) {
   }
 
   return (
-    <article
-      key={post.id}
-      className="[&:not(:last-child)]:border-b-1 border-gray-200 py-10 px-4 xl:mr-5"
-    >
-      <time dateTime={formattedDate} className="text-gray-500 italic text-xs">
-        {formattedDate}
-      </time>
-      <div className="group relative">
-        <header>
-          <Title />
-          {/* {isEditable && <button>Edit Post</button>} */}
-        </header>
-        <Body />
-      </div>
-      <div className="relative mt-8 flex items-center gap-x-4">
-        {user.image && (
-          <Image
-            alt=""
-            src={user.image}
-            className="size-10 rounded-full bg-gray-50"
-            width={40}
-            height={40}
-          />
-        )}
-        <div className="text-sm/6">
-          <p className="font-semibold text-gray-900">
-            <a href="#">
-              <span className="absolute inset-0" />
-              {user.name}
-            </a>
-          </p>
-          {/* TODO: update when introduce RBAC */}
-          {/* <p className="text-gray-600">Admin</p> */}
+    <div className="container">
+      {isEditable && (
+        <p className="text-right text-sm/6 mb-4 text-gray-500">
+          <small>TIP: To edit, click into each field.</small>
+        </p>
+      )}
+      <article
+        key={post.id}
+        className="[&:not(:last-child)]:border-b-1 border-gray-200"
+      >
+        <time dateTime={formattedDate} className="text-gray-500 italic text-xs">
+          {formattedDate}
+        </time>
+        <div className="group relative">
+          <header>
+            <Title />
+          </header>
+          <Body />
         </div>
-      </div>
-    </article>
+        <div className="relative mt-8 flex items-center gap-x-4">
+          {user.image && (
+            <Image
+              alt=""
+              src={user.image}
+              className="size-10 rounded-full bg-gray-50"
+              width={40}
+              height={40}
+            />
+          )}
+          <div className="text-sm/6">
+            <p className="font-semibold text-gray-900">
+              <a href="#">
+                <span className="absolute inset-0" />
+                {user.name}
+              </a>
+            </p>
+          </div>
+        </div>
+      </article>
+    </div>
   );
 }

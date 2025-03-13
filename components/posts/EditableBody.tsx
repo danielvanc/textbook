@@ -48,6 +48,11 @@ export default function EditableBody({
       <h3 className="mt-3 text-3xl/8 font-semibold text-gray-900">
         {isEditing ? (
           <Form {...getFormProps()}>
+            <p>
+              <small className="field-tip">
+                TIP: To save, click outside the content area
+              </small>
+            </p>
             <Editor
               content={value}
               props={{

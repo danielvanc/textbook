@@ -1,5 +1,3 @@
-// "use cache";
-
 import { getPost } from "@/utils/db";
 import PostFullView from "@/components/posts/PostFullView";
 import { notFound } from "next/navigation";

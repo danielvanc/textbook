@@ -27,11 +27,26 @@ export default function EditableTitle({
       <h3 className="mt-3 text-3xl/8 font-semibold text-gray-900">
         {isEditing ? (
           <Form {...getFormProps()}>
-            <input
-              {...getFieldProps({
-                className: "w-full",
-              })}
-            />
+            <p>
+              <span>
+                <label
+                  htmlFor="title"
+                  className="sr-only"
+                  aria-label="Post title"
+                  title="Post title"
+                >
+                  Post title
+                </label>
+                <small className="field-tip">
+                  TIP: To save, hit ENTER or to cancel, hit ESC
+                </small>
+              </span>
+              <input
+                {...getFieldProps({
+                  className: "w-full mb-8",
+                })}
+              />
+            </p>
             <input type="hidden" name="postId" value={postId} />
           </Form>
         ) : (
