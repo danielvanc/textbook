@@ -126,6 +126,15 @@
     @apply text-primary text-4xl font-bold;
   }
 }
+
+@utility container {
+  @apply max-w-3xl mx-auto py-4 px-2 lg:p-6;
+}
+
+.field-tip {
+  @apply text-right block text-sm/8 text-gray-400 font-normal;
+}
+
 .tiptap {
   :first-child {
     margin-top: 0;

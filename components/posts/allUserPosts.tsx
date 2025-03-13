@@ -3,7 +3,7 @@ import PostFullView from "./PostFullView";
 import { type User, type Post } from "@prisma/client";
 
 interface AllUserPostsProps {
-  posts: Omit<Post, "ownerId">[];
+  posts: Post[];
   user: Pick<User, "id" | "name" | "email" | "image">;
 }
 

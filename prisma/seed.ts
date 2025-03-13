@@ -1,5 +1,67 @@
-import { createSeedPosts, createSingleUser, prisma } from "@/utils/db";
+import { prisma } from "@/utils/db";
 import { generateSlug } from "@/utils/posts";
+
+export function createSingleUser() {
+  const name = "Daniel Van Cuylenburg";
+  const email = "email@danielvanc.com";
+  const id = "cm796vlvf00001i0w7889xx9y";
+  const image =
+    "https://lh3.googleusercontent.com/a/ACg8ocItaSg693lHCK4wTckqdqNKYnBTHHQtfpYGLdPvtJCQwXr0-XpN=s96-c";
+  const type = "oidc";
+  const provider = "google";
+  const providerAccountId = process.env.GOOGLE_PROVIDER_ID;
+  const providerAccountToken = process.env.GOOGLE_ACCESS_TOKEN;
+  const tokenType = "bearer";
+  const scope =
+    "openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
+  const idToken = process.env.ID_TOKEN;
+
+  return {
+    id,
+    name,
+    email,
+    image,
+    type,
+    provider,
+    providerAccountId,
+    providerAccountToken,
+    tokenType,
+    scope,
+    idToken,
+  };
+}
+
+const content = JSON.stringify({
+  type: "doc",
+  content: [
+    {
+      type: "paragraph",
+      content: [{ type: "text", text: "Hello World! 🌎️" }],
+    },
+    { type: "paragraph" },
+    {
+      type: "paragraph",
+      content: [{ type: "text", text: "I hope that this works out nicely" }],
+    },
+  ],
+});
+
+export function createSeedPosts() {
+  return [
+    {
+      title: "First Post",
+      content,
+    },
+    {
+      title: "Second Post",
+      content,
+    },
+    {
+      title: "Third Post",
+      content,
+    },
+  ];
+}
 
 async function seed() {
   console.log("🌱 Seeding...");

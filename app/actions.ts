@@ -51,3 +51,74 @@ export async function createPost(formData: FormData) {
 
   redirect("/home/posts");
 }
+
+export async function updatePostTitle(
+  prevState: EditableStateProps,
+  formData: FormData
+) {
+  const postId = String(formData.get("postId"));
+  const title = String(formData.get("title"));
+  const slug = generateSlug(title, postId);
+
+  try {
+    await prisma.post.update({
+      where: { id: postId },
+      data: {
+        title,
+        slug,
+      },
+    });
+
+    return {
+      message: "Title was successfully updated!",
+      postSlug: slug,
+      error: false,
+      completed: true,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      message: "Error updating title!",
+      postSlug: "",
+      error: true,
+      completed: false,
+    };
+  }
+}
+
+export async function updatePostBody(
+  prevState: EditableStateProps,
+  formData: FormData
+) {
+  const postId = String(formData.get("postId"));
+  const content = String(formData.get("content"));
+
+  try {
+    await prisma.post.update({
+      where: { id: postId },
+      data: {
+        content,
+      },
+      select: {
+        slug: true,
+        title: true,
+        content: true,
+        updatedAt: true,
+      },
+    });
+
+    return {
+      message: "Content was successfully updated!",
+      error: false,
+      completed: true,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      message: "Error updating content!",
+      postSlug: "",
+      error: true,
+      completed: false,
+    };
+  }
+}

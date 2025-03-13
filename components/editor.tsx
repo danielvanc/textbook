@@ -1,13 +1,15 @@
 "use client";
+
 import React from "react";
 import { useEditor, EditorContent, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { formatValue } from "@/utils/posts";
 
 const extensions = [
   StarterKit.configure({
     bulletList: {
       keepMarks: true,
-      keepAttributes: false, 
+      keepAttributes: false,
     },
     orderedList: {
       keepMarks: true,
@@ -25,42 +27,54 @@ function MenuBar({ editor }: { editor: Editor | null }) {
     <div className="control-group">
       <div className="button-group flex flex-wrap gap-2 mb-4  items-start [&>button]:border-[1px] [&>button]:rounded-sm [&>button]:p-2 [&>button]:text-sm [&>button]:cursor-pointer [&>button]:hover:bg-gray-200 [&>button]:active:bg-gray-300">
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={editor.isActive("bold") ? "bg-gray-300" : ""}
         >
           Bold
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={editor.isActive("italic") ? "is-active" : ""}
         >
           Italic
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleStrike().run()}
           className={editor.isActive("strike") ? "is-active" : ""}
         >
           Strike
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleCode().run()}
           className={editor.isActive("code") ? "is-active" : ""}
         >
           Code
         </button>
-        <button onClick={() => editor.chain().focus().unsetAllMarks().run()}>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().unsetAllMarks().run()}
+        >
           Clear marks
         </button>
-        <button onClick={() => editor.chain().focus().clearNodes().run()}>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().clearNodes().run()}
+        >
           Clear nodes
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().setParagraph().run()}
           className={editor.isActive("paragraph") ? "is-active" : ""}
         >
           Paragraph
         </button>
         <button
+          type="button"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 2 }).run()
           }
@@ -71,6 +85,7 @@ function MenuBar({ editor }: { editor: Editor | null }) {
           H2
         </button>
         <button
+          type="button"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 3 }).run()
           }
@@ -81,6 +96,7 @@ function MenuBar({ editor }: { editor: Editor | null }) {
           H3
         </button>
         <button
+          type="button"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 4 }).run()
           }
@@ -91,6 +107,7 @@ function MenuBar({ editor }: { editor: Editor | null }) {
           H4
         </button>
         <button
+          type="button"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 5 }).run()
           }
@@ -101,6 +118,7 @@ function MenuBar({ editor }: { editor: Editor | null }) {
           H5
         </button>
         <button
+          type="button"
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 6 }).run()
           }
@@ -111,41 +129,55 @@ function MenuBar({ editor }: { editor: Editor | null }) {
           H6
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={editor.isActive("bulletList") ? "is-active" : ""}
         >
           Bullet list
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           className={editor.isActive("orderedList") ? "is-active" : ""}
         >
           Ordered list
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           className={editor.isActive("codeBlock") ? "is-active" : ""}
         >
           Code block
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           className={editor.isActive("blockquote") ? "is-active" : ""}
         >
           Blockquote
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
         >
           Horizontal rule
         </button>
-        <button onClick={() => editor.chain().focus().setHardBreak().run()}>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setHardBreak().run()}
+        >
           Hard break
         </button>
-        <button onClick={() => editor.chain().focus().undo().run()}>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().undo().run()}
+        >
           Undo
         </button>
-        <button onClick={() => editor.chain().focus().redo().run()}>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().redo().run()}
+        >
           Redo
         </button>
       </div>
@@ -153,20 +185,81 @@ function MenuBar({ editor }: { editor: Editor | null }) {
   );
 }
 
-export default function TTEditor() {
+interface EditorProps {
+  onBlur?: (params: { event: FocusEvent }) => void;
+  onKeyDown?: (event: KeyboardEvent) => void;
+  formRef: React.RefObject<HTMLFormElement>;
+  ref?: React.Ref<HTMLInputElement>;
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function TTEditor<Props>({
+  content,
+  props,
+}: {
+  content?: string;
+  props?: Props | EditorProps;
+}) {
+  const [data, setData] = React.useState<string | undefined>(content);
+  const [submitForm, setSubmitForm] = React.useState(false);
+
   const editor = useEditor({
     extensions,
-    content: "<p>Hello World! 🌎️</p>",
+    content,
     immediatelyRender: false,
     editorProps: {
       attributes: {
         class: "min-h-24 border-t-2 pt-6 pb-2 border-gray-200 ",
       },
+      handleDOMEvents: {
+        keydown: (view, event) => {
+          if (
+            props &&
+            typeof props === "object" &&
+            "onKeyDown" in props &&
+            props.onKeyDown
+          ) {
+            setSubmitForm(false);
+            setData(content);
+            props.onKeyDown(event);
+          }
+          return false;
+        },
+      },
+      ...props,
     },
+    onUpdate: ({ editor }) => {
+      const json = editor?.getJSON();
+      const valueAsString = JSON.stringify(json);
+      const newData = formatValue(valueAsString);
+
+      if (data === newData) {
+        setSubmitForm(false);
+        return;
+      }
+
+      setData(newData);
+      setSubmitForm(true);
+    },
+    onBlur:
+      props && typeof props === "object" && "onBlur" in props && props.formRef
+        ? ({ event }) => {
+            if (!event.relatedTarget && !submitForm) {
+              setData(content);
+              setSubmitForm(false);
+              props.setIsEditing(false);
+              return;
+            }
+            if (event.relatedTarget || !submitForm || !props.formRef.current)
+              return;
+
+            props.formRef.current.requestSubmit();
+          }
+        : undefined,
   });
 
-  const json = editor?.getJSON();
-  console.log("json", json);
+  const customRef =
+    props && typeof props === "object" && "ref" in props ? props.ref : null;
 
   return (
     <div className="bg-gray-100/80 p-4">
@@ -174,8 +267,8 @@ export default function TTEditor() {
         Content
       </label>
       <MenuBar editor={editor} />
-      <EditorContent editor={editor} />
-      <input type="hidden" name="content" defaultValue={JSON.stringify(json)} />
+      <EditorContent editor={editor} content={data} />
+      <input type="hidden" name="content" defaultValue={data} ref={customRef} />
     </div>
   );
 }
