@@ -1,5 +1,6 @@
 "use client";
 
+import type { Editor } from "@tiptap/react";
 import {
   startTransition,
   useActionState,
@@ -9,14 +10,13 @@ import {
 } from "react";
 import { flushSync } from "react-dom";
 import { toast } from "sonner";
-
 interface EditableFieldsProps {
   action: (
     initialState: EditableStateProps,
     formData: FormData
   ) => Promise<EditableStateProps>;
   initialValue: string;
-  type?: "text" | "textarea";
+  type?: "text" | "textarea" | "editor";
 }
 
 const initialState = {
@@ -110,6 +110,53 @@ export default function useEditableFields({
           buttonRef.current?.focus();
         }
       },
+      onBlur: () =>
+        // event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+        {
+          flushSync(() => {
+            // setValue(event.currentTarget.value);
+            setIsEditing(false);
+          });
+          buttonRef.current?.focus();
+        },
+      ...props,
+    };
+  }
+
+  function getEditorProps<Props>(
+    props?:
+      | (Props &
+          Pick<
+            React.ComponentProps<"input" | "textarea">,
+            "onKeyDown" | "onBlur"
+          >)
+      | (Editor & {
+          onKeyDown?: (event: React.KeyboardEvent) => void;
+          onBlur?: (
+            event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+          ) => void;
+        })
+  ) {
+    return {
+      required: true,
+      name: "title",
+      type,
+      defaultValue: value,
+      ref: fieldRef,
+      formRef,
+      className: "",
+      "aria-label": "Edit content",
+      placeholder: "Update content",
+      setValue,
+      setIsEditing,
+      onKeyDown: (event: React.KeyboardEvent) => {
+        if (event.key === "Escape") {
+          flushSync(() => {
+            setIsEditing(false);
+          });
+          buttonRef.current?.focus();
+        }
+      },
       onBlur: (
         event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
       ) => {
@@ -148,6 +195,7 @@ export default function useEditableFields({
     setValue,
     getFormProps,
     getFieldProps,
+    getEditorProps,
     getButtonProps,
   };
 }

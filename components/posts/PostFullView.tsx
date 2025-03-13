@@ -5,6 +5,7 @@ import { type User, type Post } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import EditableTitle from "./EditableTitle";
+import EditableBody from "./EditableBody";
 
 interface PostFullViewProps {
   post: Post;
@@ -30,6 +31,17 @@ export default function PostFullView({ post, user, slug }: PostFullViewProps) {
     );
   }
 
+  function Body() {
+    return slug ? (
+      <div
+        className="mt-5 line-clamp-3 text-lg/6 text-gray-600"
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    ) : (
+      <EditableBody content={content} postId={post.id} />
+    );
+  }
+
   return (
     <article
       key={post.id}
@@ -43,10 +55,7 @@ export default function PostFullView({ post, user, slug }: PostFullViewProps) {
           <Title />
           {/* {isEditable && <button>Edit Post</button>} */}
         </header>
-        <div
-          className="mt-5 line-clamp-3 text-lg/6 text-gray-600"
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
+        <Body />
       </div>
       <div className="relative mt-8 flex items-center gap-x-4">
         {user.image && (

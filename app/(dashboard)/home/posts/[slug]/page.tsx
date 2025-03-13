@@ -1,4 +1,4 @@
-"use cache";
+// "use cache";
 
 import { getPost } from "@/utils/db";
 import PostFullView from "@/components/posts/PostFullView";

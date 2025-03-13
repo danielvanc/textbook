@@ -70,7 +70,7 @@ export async function updatePostTitle(
     });
 
     return {
-      message: "Successfully updated!",
+      message: "Successfully updated the title!",
       postSlug: slug,
       error: false,
       completed: true,
@@ -79,6 +79,42 @@ export async function updatePostTitle(
     console.error(error);
     return {
       message: "Error updating title!",
+      postSlug: "",
+      error: true,
+      completed: false,
+    };
+  }
+}
+
+export async function updatePostBody(
+  prevState: EditableStateProps,
+  formData: FormData
+) {
+  const postId = String(formData.get("postId"));
+  const content = String(formData.get("content")); // changed variable name to content
+  try {
+    await prisma.post.update({
+      where: { id: postId },
+      data: {
+        content, // updated data to include content
+      },
+      select: {
+        slug: true,
+        title: true,
+        content: true,
+        updatedAt: true,
+      },
+    });
+
+    return {
+      message: "Successfully updated the content!",
+      error: false,
+      completed: true,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      message: "Error updating content!",
       postSlug: "",
       error: true,
       completed: false,
