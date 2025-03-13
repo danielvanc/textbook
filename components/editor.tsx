@@ -3,6 +3,7 @@
 import React from "react";
 import { useEditor, EditorContent, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { formatValue } from "@/utils/posts";
 
 const extensions = [
   StarterKit.configure({
@@ -197,6 +198,9 @@ export default function TTEditor<Props>({
   content?: string;
   props?: Props | EditorProps;
 }) {
+  const [data, setData] = React.useState<string | undefined>(content);
+  const [submitForm, setSubmitForm] = React.useState(false);
+
   const editor = useEditor({
     extensions,
     content,
@@ -207,22 +211,27 @@ export default function TTEditor<Props>({
       },
       ...props,
     },
+    onUpdate: ({ editor }) => {
+      const json = editor?.getJSON();
+      const valueAsString = JSON.stringify(json);
+      const newData = formatValue(valueAsString);
+      if (data === newData) {
+        setSubmitForm(false);
+        return;
+      }
+
+      setData(newData);
+      setSubmitForm(true);
+    },
     onBlur:
       props && typeof props === "object" && "onBlur" in props && props.formRef
         ? ({ event }) => {
-            if (!event.relatedTarget) {
-              props.formRef.current.requestSubmit();
-            }
+            if (event.relatedTarget || !submitForm) return;
+
+            props.formRef.current.requestSubmit();
           }
         : undefined,
   });
-
-  // if (!editor) {
-  //   throw new Error("Something went wrong while initialising the post editor");
-  // }
-
-  const json = editor?.getJSON();
-  const valueAsString = JSON.stringify(json);
 
   const customRef =
     props && typeof props === "object" && "ref" in props ? props.ref : null;
@@ -233,13 +242,8 @@ export default function TTEditor<Props>({
         Content
       </label>
       <MenuBar editor={editor} />
-      <EditorContent editor={editor} content={content ?? undefined} />
-      <input
-        type="hidden"
-        name="content"
-        defaultValue={valueAsString}
-        ref={customRef}
-      />
+      <EditorContent editor={editor} content={data} />
+      <input type="hidden" name="content" defaultValue={data} ref={customRef} />
     </div>
   );
 }

@@ -5,24 +5,7 @@ import Form from "next/form";
 import Spinner from "../icons/spinner";
 import { updatePostBody as action } from "@/app/actions";
 import Editor from "@/components/editor";
-import { generateHTML } from "@tiptap/html";
-import StarterKit from "@tiptap/starter-kit";
-
-function formatValue(value: string) {
-  try {
-    // Check if value looks like JSON
-    const parsedValue = JSON.parse(value);
-    // Generate HTML from JSON content if it has the expected structure
-    if (parsedValue && parsedValue.type === "doc") {
-      return generateHTML(parsedValue, [StarterKit]);
-    }
-    return value; // Return as-is if parsed but not proper doc format
-  } catch (error) {
-    console.log("error", error);
-    // If parsing fails, it's not JSON, so return the original value
-    return value;
-  }
-}
+import { formatValue } from "@/utils/posts";
 
 export default function EditableBody({
   content,
@@ -50,7 +33,7 @@ export default function EditableBody({
           <Form {...getFormProps()}>
             <p>
               <small className="field-tip">
-                TIP: To save, click outside the content area
+                TIP: To save, make a change then click outside the content area
               </small>
             </p>
             <Editor

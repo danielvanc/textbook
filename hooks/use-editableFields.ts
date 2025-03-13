@@ -1,6 +1,8 @@
 "use client";
 
-import type { Editor } from "@tiptap/react";
+import { type Editor } from "@tiptap/react";
+import { generateHTML } from "@tiptap/html";
+import StarterKit from "@tiptap/starter-kit";
 import {
   startTransition,
   useActionState,
@@ -161,7 +163,13 @@ export default function useEditableFields({
         event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
       ) => {
         flushSync(() => {
-          setValue(event.currentTarget.value);
+          const content = generateHTML(JSON.parse(event.currentTarget.value), [
+            StarterKit,
+          ]);
+
+          console.log("content being sent", content);
+
+          setValue(content);
           setIsEditing(false);
         });
         buttonRef.current?.focus();

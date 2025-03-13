@@ -1,4 +1,6 @@
 import { type Post } from "@prisma/client";
+import { generateHTML } from "@tiptap/html";
+import StarterKit from "@tiptap/starter-kit";
 
 export function generateSlug(str: string, id: string) {
   const trimmedId = id.slice(-5);
@@ -27,4 +29,20 @@ export function sortPostsByDateDesc(posts: Post[]) {
   return posts.sort((a, b) => {
     return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
   });
+}
+
+export function formatValue(value: string) {
+  try {
+    // Check if value looks like JSON
+    const parsedValue = JSON.parse(value);
+    // Generate HTML from JSON content if it has the expected structure
+    if (parsedValue && parsedValue.type === "doc") {
+      return generateHTML(parsedValue, [StarterKit]);
+    }
+    return value; // Return as-is if parsed but not proper doc format
+  } catch (error) {
+    console.log("error", error);
+    // If parsing fails, it's not JSON, so return the original value
+    return value;
+  }
 }

@@ -1,6 +1,4 @@
-import { formatDate } from "@/utils/posts";
-import { generateHTML } from "@tiptap/html";
-import StarterKit from "@tiptap/starter-kit";
+import { formatDate, formatValue } from "@/utils/posts";
 import { type User, type Post } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,7 +13,7 @@ interface PostFullViewProps {
 
 export default function PostFullView({ post, user, slug }: PostFullViewProps) {
   const formattedDate = formatDate(post.updatedAt);
-  const content = generateHTML(JSON.parse(post.content), [StarterKit]);
+  const content = formatValue(post.content);
   const isEditable = !slug ? post.ownerId === user.id : false;
 
   function Title() {
