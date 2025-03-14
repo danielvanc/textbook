@@ -10,8 +10,8 @@ type PostFormProps = {
 };
 
 const initialState = {
-  message: '',
-}
+  message: "",
+};
 export default function PostForm({ userId, action, children }: PostFormProps) {
   const [state, formAction] = useActionState(
     (state: { message: string }, formData: FormData) => action(formData),
@@ -49,6 +49,18 @@ export default function PostForm({ userId, action, children }: PostFormProps) {
           />
         </label>
       </p> */}
+      <p>
+        <label htmlFor="description" className="sr-only">
+          Description
+        </label>
+        <input
+          type="text"
+          id="description"
+          name="description"
+          className="block w-full"
+          placeholder="Description"
+        />
+      </p>
       <Editor />
       {state?.message && <p className="text-red-500">{state.message}</p>}
       {children}

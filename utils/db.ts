@@ -60,10 +60,10 @@ export async function getPost(slug: string): Promise<
 > {
   try {
     const data = await prisma.post.findUnique({
-      // cacheStrategy: {
-      //   swr: 240,
-      //   ttl: 240,
-      // },
+      cacheStrategy: {
+        swr: 240,
+        ttl: 240,
+      },
       where: { slug },
       select: {
         id: true,
