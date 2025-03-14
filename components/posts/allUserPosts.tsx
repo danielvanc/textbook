@@ -1,6 +1,6 @@
 import { sortPostsByDateDesc } from "@/utils/posts";
-import PostFullView from "./PostFullView";
 import { type User, type Post } from "@prisma/client";
+import PostPreview from "./PostPreview";
 
 interface AllUserPostsProps {
   posts: Post[];
@@ -8,13 +8,7 @@ interface AllUserPostsProps {
 }
 
 export default function AllUserPosts({ user, posts }: AllUserPostsProps) {
-  // TODO: Update to use PostShortView component
   return sortPostsByDateDesc(posts).map((post) => (
-    <PostFullView
-      key={post.id}
-      post={post}
-      user={user}
-      slug={post.slug as string}
-    />
+    <PostPreview key={post.id} post={post} user={user} />
   ));
 }

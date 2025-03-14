@@ -50,14 +50,17 @@ export function createSeedPosts() {
   return [
     {
       title: "First Post",
+      description: "Hello world description",
       content,
     },
     {
       title: "Second Post",
+      description: "Another description",
       content,
     },
     {
       title: "Third Post",
+      description: "And yet another description",
       content,
     },
   ];
@@ -76,7 +79,7 @@ async function seed() {
   }
 
   prisma.$transaction(async (tx) => {
-    const entry = await prisma.user.create({
+    const entry = await tx.user.create({
       data: {
         id: user.id,
         email: user.email,

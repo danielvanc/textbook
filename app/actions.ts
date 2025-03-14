@@ -17,6 +17,7 @@ export async function createPost(formData: FormData) {
   const userId = String(formData.get("userId"));
   const title = String(formData.get("title"));
   const content = String(formData.get("content"));
+  const description = String(formData.get("description"));
 
   try {
     await prisma.$transaction(async (tx) => {
@@ -24,6 +25,7 @@ export async function createPost(formData: FormData) {
         data: {
           title,
           content,
+          description,
           ownerId: userId,
         },
         select: {
@@ -78,7 +80,38 @@ export async function updatePostTitle(
   } catch (error) {
     console.error(error);
     return {
-      message: "Error updating title!",
+      message: "Error updating the title!",
+      postSlug: "",
+      error: true,
+      completed: false,
+    };
+  }
+}
+
+export async function updatePostDescription(
+  prevState: EditableStateProps,
+  formData: FormData
+) {
+  const postId = String(formData.get("postId"));
+  const description = String(formData.get("description"));
+
+  try {
+    await prisma.post.update({
+      where: { id: postId },
+      data: {
+        description,
+      },
+    });
+
+    return {
+      message: "Description was successfully updated!",
+      error: false,
+      completed: true,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      message: "Error updating the description!",
       postSlug: "",
       error: true,
       completed: false,
@@ -115,7 +148,7 @@ export async function updatePostBody(
   } catch (error) {
     console.error(error);
     return {
-      message: "Error updating content!",
+      message: "Error updating the content.",
       postSlug: "",
       error: true,
       completed: false,

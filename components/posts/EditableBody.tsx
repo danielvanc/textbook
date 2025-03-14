@@ -55,7 +55,7 @@ export default function EditableBody({
         ) : (
           <div className="flex items-center text-left gap-x-2 relative">
             {isPending && (
-              <span className="absolute -left-8">
+              <span className="absolute -left-8 top-0">
                 <Spinner />
               </span>
             )}
@@ -64,7 +64,7 @@ export default function EditableBody({
               disabled={isPending}
             >
               <div
-                className="line-clamp-3 text-lg/6 text-gray-600"
+                className="text-lg/6 text-gray-600 font-normal"
                 dangerouslySetInnerHTML={{
                   __html: postContent,
                 }}

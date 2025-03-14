@@ -1,5 +1,3 @@
-import "server-only";
-
 import { remember } from "@epic-web/remember";
 import { PrismaClient, type User, type Post } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
@@ -38,6 +36,7 @@ export async function getUsersPosts(userId: string) {
           title: true,
           slug: true,
           content: true,
+          description: true,
           createdAt: true,
           updatedAt: true,
           ownerId: true,
@@ -61,10 +60,10 @@ export async function getPost(slug: string): Promise<
 > {
   try {
     const data = await prisma.post.findUnique({
-      // cacheStrategy: {
-      //   swr: 240,
-      //   ttl: 240,
-      // },
+      cacheStrategy: {
+        swr: 240,
+        ttl: 240,
+      },
       where: { slug },
       select: {
         id: true,
@@ -73,6 +72,7 @@ export async function getPost(slug: string): Promise<
         content: true,
         createdAt: true,
         updatedAt: true,
+        description: true,
         owner: {
           select: {
             id: true,
@@ -97,6 +97,7 @@ export async function getPost(slug: string): Promise<
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
         ownerId: data.owner.id,
+        description: data.description,
       },
       user: data.owner,
     };
