@@ -1,6 +1,5 @@
 import { prisma } from "@/utils/db";
 import { generateSlug } from "@/utils/posts";
-import { PrismaClient } from "@prisma/client";
 
 export function createSingleUser() {
   const name = "Daniel Van Cuylenburg";
@@ -79,7 +78,7 @@ async function seed() {
     await prisma.user.delete({ where: { id: user.id } });
   }
 
-  prisma.$transaction(async (tx: PrismaClient) => {
+  prisma.$transaction(async (tx) => {
     const entry = await tx.user.create({
       data: {
         id: user.id,
