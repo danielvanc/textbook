@@ -36,6 +36,7 @@ export async function getUsersPosts(userId: string) {
           title: true,
           slug: true,
           content: true,
+          description: true,
           createdAt: true,
           updatedAt: true,
           ownerId: true,
@@ -71,6 +72,7 @@ export async function getPost(slug: string): Promise<
         content: true,
         createdAt: true,
         updatedAt: true,
+        description: true,
         owner: {
           select: {
             id: true,
@@ -95,6 +97,7 @@ export async function getPost(slug: string): Promise<
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
         ownerId: data.owner.id,
+        description: data.description,
       },
       user: data.owner,
     };
