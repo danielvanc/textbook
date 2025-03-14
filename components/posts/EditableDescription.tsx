@@ -3,7 +3,7 @@
 import useEditableFields from "@/hooks/use-editableFields";
 import Form from "next/form";
 import Spinner from "../icons/spinner";
-import { updatePostTitle as action } from "@/app/actions";
+import { updatePostDescription as action } from "@/app/actions";
 
 export default function EditableDescription({
   content,
@@ -41,9 +41,10 @@ export default function EditableDescription({
                   TIP: To save, hit ENTER or to cancel, hit ESC
                 </small>
               </span>
+              {/* TODO: Change to a textarea field */}
               <input
                 {...getFieldProps({
-                  className: "w-full mb-8",
+                  className: "w-full mb-8 text-lg font-normal",
                   id: "description",
                   name: "description",
                 })}
@@ -59,8 +60,9 @@ export default function EditableDescription({
               </span>
             )}
             <button
-              {...getButtonProps({ className: "w-3/4 text-left" })}
+              {...getButtonProps({ className: "w-3/4" })}
               disabled={isPending}
+              className="text-lg text-left font-normal"
             >
               {value}
             </button>

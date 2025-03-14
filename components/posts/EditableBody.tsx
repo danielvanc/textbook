@@ -64,7 +64,7 @@ export default function EditableBody({
               disabled={isPending}
             >
               <div
-                className="line-clamp-3 text-lg/6 text-gray-600"
+                className="line-clamp-3 text-lg/6 text-gray-600 font-normal"
                 dangerouslySetInnerHTML={{
                   __html: postContent,
                 }}
