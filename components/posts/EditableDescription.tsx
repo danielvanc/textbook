@@ -55,7 +55,7 @@ export default function EditableDescription({
         ) : (
           <div className="flex items-center text-left gap-x-2 relative">
             {isPending && (
-              <span className="absolute -left-6">
+              <span className="absolute -left-6 top-2">
                 <Spinner />
               </span>
             )}
