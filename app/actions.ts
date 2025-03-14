@@ -3,6 +3,7 @@ import { signIn, signOut } from "@/auth";
 import config from "@/utils/config";
 import { prisma } from "@/utils/db";
 import { generateSlug } from "@/utils/posts";
+import { PrismaClient } from "@prisma/client";
 import { redirect } from "next/navigation";
 
 export async function logInUser() {
@@ -19,7 +20,7 @@ export async function createPost(formData: FormData) {
   const content = String(formData.get("content"));
 
   try {
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: PrismaClient) => {
       const post = await tx.post.create({
         data: {
           title,
@@ -54,7 +55,7 @@ export async function createPost(formData: FormData) {
 
 export async function updatePostTitle(
   prevState: EditableStateProps,
-  formData: FormData
+  formData: FormData,
 ) {
   const postId = String(formData.get("postId"));
   const title = String(formData.get("title"));
@@ -88,7 +89,7 @@ export async function updatePostTitle(
 
 export async function updatePostBody(
   prevState: EditableStateProps,
-  formData: FormData
+  formData: FormData,
 ) {
   const postId = String(formData.get("postId"));
   const content = String(formData.get("content"));

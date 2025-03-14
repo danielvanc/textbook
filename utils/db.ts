@@ -1,5 +1,3 @@
-import "server-only";
-
 import { remember } from "@epic-web/remember";
 import { PrismaClient, type User, type Post } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
