@@ -156,7 +156,6 @@ export default function useEditableFields({
           flushSync(() => {
             setIsEditing(false);
           });
-          buttonRef.current?.focus();
         }
       },
       onBlur: (

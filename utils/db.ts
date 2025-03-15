@@ -59,10 +59,6 @@ export const authAdapter = PrismaAdapter(prisma);
 
 export async function getUsersPosts(userId: string) {
   const user = await prisma.user.findUnique({
-    cacheStrategy: {
-      swr: 120,
-      ttl: 120,
-    },
     where: { id: userId },
     select: {
       id: true,
@@ -98,10 +94,9 @@ export async function getPost(slug: string): Promise<
 > {
   try {
     const data = await prisma.post.findUnique({
-      // cacheStrategy: {
-      //   swr: 240,
-      //   ttl: 240,
-      // },
+      cacheStrategy: {
+        swr: 60,
+      },
       where: { slug },
       select: {
         id: true,

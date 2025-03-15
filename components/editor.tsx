@@ -202,11 +202,14 @@ export default function TTEditor<Props>({
 }) {
   const [data, setData] = React.useState<string | undefined>(content);
   const [submitForm, setSubmitForm] = React.useState(false);
+  const customRef =
+    props && typeof props === "object" && "ref" in props ? props.ref : null;
 
   const editor = useEditor({
     extensions,
     content,
     immediatelyRender: false,
+    autofocus: true,
     editorProps: {
       attributes: {
         class: "min-h-24 border-t-2 pt-6 pb-2 border-gray-200 ",
@@ -257,9 +260,6 @@ export default function TTEditor<Props>({
           }
         : undefined,
   });
-
-  const customRef =
-    props && typeof props === "object" && "ref" in props ? props.ref : null;
 
   return (
     <div className="bg-gray-100/80 p-4">
