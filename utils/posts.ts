@@ -40,9 +40,7 @@ export function formatValue(value: string) {
       return generateHTML(parsedValue, [StarterKit]);
     }
     return value; // Return as-is if parsed but not proper doc format
-  } catch (error) {
-    console.log("error", error);
-    // If parsing fails, it's not JSON, so return the original value
+  } catch {
     return value;
   }
 }
