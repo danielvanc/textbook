@@ -1,30 +1,68 @@
 import { remember } from "@epic-web/remember";
-import { PrismaClient, type User, type Post } from "@prisma/client";
+import {
+  PrismaClient,
+  type User,
+  type Post,
+  type Prisma,
+} from "@prisma/client/index.js";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { withOptimize } from "@prisma/extension-optimize";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { redirect } from "next/navigation";
+import { styleText } from "util";
 
 const isProd = process.env.NODE_ENV === "production";
+const isOptimizeMode = !!process.env.OPTIMIZE;
+const enableOptimize = !(isProd || !isOptimizeMode);
 
-const generateClient = () => {
-  return isProd
-    ? new PrismaClient().$extends(withAccelerate())
-    : new PrismaClient()
-        .$extends(withOptimize({ apiKey: process.env.OPTIMIZE_API_KEY! }))
-        .$extends(withAccelerate());
-};
+export const prisma = remember("prisma", () => {
+  const logThreshold = 20;
 
-export const prisma = remember("prisma", generateClient);
+  async function queryOutput(e: Prisma.QueryEvent) {
+    if (e.duration < logThreshold) return;
+    const color =
+      e.duration < logThreshold * 1.1
+        ? "green"
+        : e.duration < logThreshold * 1.2
+        ? "blue"
+        : e.duration < logThreshold * 1.3
+        ? "yellow"
+        : e.duration < logThreshold * 1.4
+        ? "redBright"
+        : "red";
+    const dur = styleText(color, `${e.duration}ms`);
+    console.info(`prisma:query - ${dur} - ${e.query}`);
+  }
+
+  const client = new PrismaClient({
+    log: [
+      { level: "query", emit: "event" },
+      { level: "error", emit: "stdout" },
+      { level: "warn", emit: "stdout" },
+    ],
+  })
+    .$on("query", queryOutput)
+    .$extends(
+      withOptimize({
+        enable: enableOptimize,
+        apiKey: process.env.OPTIMIZE_API_KEY!,
+      })
+    )
+    .$extends(withAccelerate());
+
+  client.$connect();
+
+  return client;
+});
 
 export const authAdapter = PrismaAdapter(prisma);
 
 export async function getUsersPosts(userId: string) {
   const user = await prisma.user.findUnique({
-    // cacheStrategy: {
-    //   swr: 120,
-    //   ttl: 120,
-    // },
+    cacheStrategy: {
+      swr: 120,
+      ttl: 120,
+    },
     where: { id: userId },
     select: {
       id: true,
@@ -60,10 +98,10 @@ export async function getPost(slug: string): Promise<
 > {
   try {
     const data = await prisma.post.findUnique({
-      cacheStrategy: {
-        swr: 240,
-        ttl: 240,
-      },
+      // cacheStrategy: {
+      //   swr: 240,
+      //   ttl: 240,
+      // },
       where: { slug },
       select: {
         id: true,
