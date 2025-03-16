@@ -54,6 +54,24 @@ export async function createPost(formData: FormData) {
   redirect("/home/posts");
 }
 
+export async function deletePost(formData: FormData) {
+  const postId = String(formData.get("postId"));
+
+  try {
+    await prisma.post.delete({
+      where: { id: postId },
+    });
+  } catch (error) {
+    console.error(error);
+    return {
+      message: "Error deleting post!",
+      error: true,
+    };
+  }
+
+  redirect("/home/posts");
+}
+
 export async function updatePostTitle(
   prevState: EditableStateProps,
   formData: FormData

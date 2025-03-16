@@ -4,6 +4,7 @@ import EditableTitle from "./EditableTitle";
 import EditableBody from "./EditableBody";
 import EditableDescription from "./EditableDescription";
 import PostFooter from "./PostFooter";
+import DeletePost from "./DeletePost";
 
 interface PostFullProps {
   post: Post;
@@ -27,9 +28,15 @@ export default function PostFullView({ post, user, slug }: PostFullProps) {
         key={post.id}
         className="[&:not(:last-child)]:border-b-1 border-gray-200"
       >
-        <time dateTime={formattedDate} className="text-gray-500 italic text-xs">
-          {formattedDate}
-        </time>
+        <div className="flex items-center justify-between mb-4">
+          <time
+            dateTime={formattedDate}
+            className="text-gray-500 italic text-xs"
+          >
+            {formattedDate}
+          </time>
+          <DeletePost postId={post.id} />
+        </div>
         <div className="group relative">
           <header>
             <EditableTitle title={post.title} postId={post.id} />
