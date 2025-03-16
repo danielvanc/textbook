@@ -8,6 +8,10 @@ interface AllUserPostsProps {
 }
 
 export default function AllUserPosts({ user, posts }: AllUserPostsProps) {
+  if (!posts || posts.length === 0) {
+    return <p>Looks like you haven&apos;t made any posts yet</p>;
+  }
+
   return sortPostsByDateDesc(posts).map((post) => (
     <PostPreview key={post.id} post={post} user={user} />
   ));

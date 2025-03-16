@@ -7,7 +7,7 @@ interface PostFooterProps {
 
 export default function PostFooter({ user }: PostFooterProps) {
   return (
-    <div className="relative mt-8 flex items-center gap-x-4">
+    <div className="relative my-8 flex items-center gap-x-4">
       {user.image && (
         <Image
           alt=""

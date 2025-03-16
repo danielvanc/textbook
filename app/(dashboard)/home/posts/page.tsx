@@ -7,5 +7,9 @@ export default async function MyPostsPage() {
   const { user, userId } = await verifyUserSession();
   const { posts } = await getUsersPosts(userId);
 
-  return <AllUserPosts posts={posts} user={user} />;
+  return (
+    <div className="container">
+      <AllUserPosts posts={posts} user={user} />
+    </div>
+  );
 }

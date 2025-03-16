@@ -1,9 +1,10 @@
-import { formatDate, formatValue } from "@/utils/posts";
+import { formatValue } from "@/utils/posts";
 import { type User, type Post } from "@prisma/client";
 import EditableTitle from "./EditableTitle";
 import EditableBody from "./EditableBody";
 import EditableDescription from "./EditableDescription";
 import PostFooter from "./PostFooter";
+import PostPreHeader from "./PostPreHeader";
 
 interface PostFullProps {
   post: Post;
@@ -12,7 +13,6 @@ interface PostFullProps {
 }
 
 export default function PostFullView({ post, user, slug }: PostFullProps) {
-  const formattedDate = formatDate(post.updatedAt);
   const content = formatValue(post.content);
   const isEditable = !slug ? post.ownerId === user.id : false;
 
@@ -27,9 +27,7 @@ export default function PostFullView({ post, user, slug }: PostFullProps) {
         key={post.id}
         className="[&:not(:last-child)]:border-b-1 border-gray-200"
       >
-        <time dateTime={formattedDate} className="text-gray-500 italic text-xs">
-          {formattedDate}
-        </time>
+        <PostPreHeader post={post} />
         <div className="group relative">
           <header>
             <EditableTitle title={post.title} postId={post.id} />
