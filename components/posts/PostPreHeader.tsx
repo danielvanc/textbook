@@ -5,7 +5,7 @@ import { formatDate } from "@/utils/posts";
 export default function PostPreHeader({ post }: { post: Post }) {
   const formattedDate = formatDate(post.updatedAt);
   return (
-    <div className="flex items-center justify-between mb-4">
+    <div className="flex items-center justify-between">
       <time dateTime={formattedDate} className="text-gray-500 italic text-xs">
         {formattedDate}
       </time>
