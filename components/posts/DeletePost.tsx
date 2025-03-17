@@ -4,6 +4,8 @@ import Form from "next/form";
 import { useActionState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
+import { Trash2Icon } from "lucide-react";
+import Spinner from "../icons/spinner";
 
 const initialState = {
   message: "",
@@ -28,10 +30,11 @@ export default function DeletePost({ postId }: { postId: string }) {
       <Button disabled={pending} className="cursor-pointer" variant={"outline"}>
         {pending ? (
           <>
-            <span className="loading-spinner" /> Deleting post...
+            <Spinner />
+            Deleting post...
           </>
         ) : (
-          "Delete Post"
+          <Trash2Icon className="text-red-500" />
         )}
       </Button>
       <input type="hidden" name="postId" value={postId} />
