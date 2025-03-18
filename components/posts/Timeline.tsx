@@ -1,9 +1,10 @@
-import type { Post, User } from "@prisma/client";
+import type { Bookmark, Post, User } from "@prisma/client";
 import PostPreview from "./PostPreview";
 
 interface TimelineProps {
   posts: (Post & {
     owner: Pick<User, "id" | "name" | "email" | "image">;
+    bookmarks: Pick<Bookmark, "userId">[];
   })[];
 }
 

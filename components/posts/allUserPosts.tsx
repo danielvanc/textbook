@@ -1,8 +1,8 @@
-import { type User, type Post } from "@prisma/client";
+import { type User, type Post, type Bookmark } from "@prisma/client";
 import PostPreview from "./PostPreview";
 
 interface AllUserPostsProps {
-  posts: Post[];
+  posts: (Post & { bookmarks: Pick<Bookmark, "userId">[] })[];
   user: Pick<User, "id" | "name" | "email" | "image">;
 }
 

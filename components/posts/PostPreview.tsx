@@ -1,4 +1,4 @@
-import { type User, type Post } from "@prisma/client";
+import { type User, type Post, type Bookmark } from "@prisma/client";
 import Link from "next/link";
 import PostFooter from "./PostFooter";
 import PostPreHeader from "./PostPreHeader";
@@ -6,6 +6,7 @@ import PostPreHeader from "./PostPreHeader";
 interface PostPreviewProps {
   post: Post & {
     owner: Pick<User, "id" | "name" | "email" | "image">;
+    bookmarks: Pick<Bookmark, "userId">[];
   };
   slug?: string;
 }

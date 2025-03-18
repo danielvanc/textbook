@@ -115,6 +115,7 @@ export async function getUsersPosts(userId: string) {
           createdAt: true,
           updatedAt: true,
           ownerId: true,
+          bookmarks: true,
         },
       },
     },
