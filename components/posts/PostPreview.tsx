@@ -17,6 +17,7 @@ export default function PostPreview({ post }: PostPreviewProps) {
     email: post.owner.email,
     image: post.owner.image,
   };
+
   return (
     <article
       key={post.id}
