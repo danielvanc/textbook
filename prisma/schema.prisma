@@ -8,16 +8,17 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String?
-  username      String?   @unique
-  email         String    @unique
+  username      String?    @unique
+  email         String     @unique
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   accounts      Account[]
   Post          Post[]
+  bookmarks     Bookmark[]
 }
 
 model Account {
@@ -52,7 +53,8 @@ model Post {
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   ownerId String
 
-  images PostImage[]
+  images    PostImage[]
+  bookmarks Bookmark[]
 
   @@index([ownerId, updatedAt])
 }
@@ -66,8 +68,23 @@ model PostImage {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  post   Post   @relation(fields: [noteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  noteId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  postId String
 
-  @@index([noteId])
+  @@index([postId])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
 }
