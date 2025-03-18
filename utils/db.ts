@@ -4,6 +4,7 @@ import {
   type User,
   type Post,
   type Prisma,
+  type Bookmark,
 } from "@prisma/client/index.js";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { withOptimize } from "@prisma/extension-optimize";
@@ -82,6 +83,13 @@ export async function getTimelinePosts() {
           image: true,
         },
       },
+      bookmarks: {
+        select: {
+          id: true,
+          userId: true,
+          postId: true,
+        },
+      },
     },
   });
 }
@@ -120,7 +128,7 @@ export async function getUsersPosts(userId: string) {
 
 export async function getPost(slug: string): Promise<
   | {
-      post: Post;
+      post: Post & { bookmarks: Pick<Bookmark, "userId">[] };
       user: Pick<User, "id" | "name" | "email" | "image">;
     }
   | undefined
@@ -147,6 +155,13 @@ export async function getPost(slug: string): Promise<
             image: true,
           },
         },
+        bookmarks: {
+          select: {
+            id: true,
+            userId: true,
+            postId: true,
+          },
+        },
       },
     });
 
@@ -164,6 +179,7 @@ export async function getPost(slug: string): Promise<
         updatedAt: data.updatedAt,
         ownerId: data.owner.id,
         description: data.description,
+        bookmarks: data.bookmarks,
       },
       user: data.owner,
     };

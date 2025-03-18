@@ -173,3 +173,33 @@ export async function updatePostBody(
     };
   }
 }
+
+export async function bookmarkPost(formData: FormData) {
+  const postId = String(formData.get("postId"));
+  const userId = String(formData.get("userId"));
+
+  try {
+    const bookmark = await prisma.bookmark.create({
+      data: {
+        userId,
+        postId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    return {
+      ...bookmark,
+      message: "Post bookmarked successfully!",
+      error: false,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      id: "",
+      message: "Error bookmarking post!",
+      error: true,
+    };
+  }
+}

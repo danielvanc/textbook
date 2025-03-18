@@ -37,3 +37,14 @@ export function formatValue(value: string) {
     return value;
   }
 }
+
+export function postIsBookmarkedByUser(
+  bookmarks: { userId: string }[],
+  userId: string
+) {
+  if (!bookmarks || bookmarks.length === 0) {
+    return false;
+  }
+
+  return bookmarks.some((bookmark) => bookmark.userId === userId);
+}

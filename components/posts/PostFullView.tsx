@@ -1,5 +1,5 @@
 import { formatValue } from "@/utils/posts";
-import { type User, type Post } from "@prisma/client";
+import { type User, type Post, type Bookmark } from "@prisma/client";
 import EditableTitle from "./EditableTitle";
 import EditableBody from "./EditableBody";
 import EditableDescription from "./EditableDescription";
@@ -7,7 +7,7 @@ import PostFooter from "./PostFooter";
 import PostPreHeader from "./PostPreHeader";
 
 interface PostFullProps {
-  post: Post;
+  post: Post & { bookmarks: Pick<Bookmark, "userId">[] };
   user: Pick<User, "id" | "name" | "email" | "image">;
   slug?: string;
 }
