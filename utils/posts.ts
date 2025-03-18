@@ -1,4 +1,3 @@
-import { type Post } from "@prisma/client";
 import { generateHTML } from "@tiptap/html";
 import StarterKit from "@tiptap/starter-kit";
 
@@ -23,12 +22,6 @@ export function formatDate(date: Date) {
       day: "2-digit",
     })
     .replace(/(\d{2}) /, "$1, "); // Add comma after day
-}
-
-export function sortPostsByDateDesc(posts: Post[]) {
-  return posts.sort((a, b) => {
-    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
-  });
 }
 
 export function formatValue(value: string) {

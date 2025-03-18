@@ -57,6 +57,35 @@ export const prisma = remember("prisma", () => {
 
 export const authAdapter = PrismaAdapter(prisma);
 
+export async function getTimelinePosts() {
+  return await prisma.post.findMany({
+    // cacheStrategy: {
+    //   swr: 60,
+    // },
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      content: true,
+      description: true,
+      createdAt: true,
+      updatedAt: true,
+      ownerId: true,
+      owner: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+        },
+      },
+    },
+  });
+}
+
 export async function getUsersPosts(userId: string) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -64,7 +93,11 @@ export async function getUsersPosts(userId: string) {
       id: true,
       email: true,
       name: true,
+      image: true,
       Post: {
+        orderBy: {
+          updatedAt: "desc",
+        },
         select: {
           id: true,
           title: true,

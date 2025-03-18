@@ -14,6 +14,20 @@ const nextConfig: NextConfig = {
         pathname: "/a/**",
         search: "",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.jsdelivr.net",
+        port: "",
+        pathname: "/gh/faker-js/**",
+        search: "",
+      },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+        port: "",
+        pathname: "/u/**",
+        search: "",
+      },
     ],
   },
 };
