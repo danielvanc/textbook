@@ -129,7 +129,7 @@ export async function getUsersPosts(userId: string) {
 
 export async function getPost(slug: string): Promise<
   | {
-      post: Post & { bookmarks: Pick<Bookmark, "userId">[] };
+      post: Post & { bookmarks: Pick<Bookmark, "userId" | "id">[] };
       user: Pick<User, "id" | "name" | "email" | "image">;
     }
   | undefined

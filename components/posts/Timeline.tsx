@@ -4,7 +4,7 @@ import PostPreview from "./PostPreview";
 interface TimelineProps {
   posts: (Post & {
     owner: Pick<User, "id" | "name" | "email" | "image">;
-    bookmarks: Pick<Bookmark, "userId">[];
+    bookmarks: Pick<Bookmark, "userId" | "id">[];
   })[];
 }
 

@@ -2,7 +2,7 @@ import { type User, type Post, type Bookmark } from "@prisma/client";
 import PostPreview from "./PostPreview";
 
 interface AllUserPostsProps {
-  posts: (Post & { bookmarks: Pick<Bookmark, "userId">[] })[];
+  posts: (Post & { bookmarks: Pick<Bookmark, "userId" | "id">[] })[];
   user: Pick<User, "id" | "name" | "email" | "image">;
 }
 

@@ -6,7 +6,7 @@ import PostPreHeader from "./PostPreHeader";
 interface PostPreviewProps {
   post: Post & {
     owner: Pick<User, "id" | "name" | "email" | "image">;
-    bookmarks: Pick<Bookmark, "userId">[];
+    bookmarks: Pick<Bookmark, "userId" | "id">[];
   };
   slug?: string;
 }

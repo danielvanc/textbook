@@ -7,7 +7,7 @@ import PostFooter from "./PostFooter";
 import PostPreHeader from "./PostPreHeader";
 
 interface PostFullProps {
-  post: Post & { bookmarks: Pick<Bookmark, "userId">[] };
+  post: Post & { bookmarks: Pick<Bookmark, "userId" | "id">[] };
   user: Pick<User, "id" | "name" | "email" | "image">;
   slug?: string;
 }
