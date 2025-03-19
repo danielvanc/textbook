@@ -1,15 +1,24 @@
-import { type User, type Post } from "@prisma/client";
+import { type User, type Post, type Bookmark } from "@prisma/client";
 import Link from "next/link";
 import PostFooter from "./PostFooter";
 import PostPreHeader from "./PostPreHeader";
 
 interface PostPreviewProps {
-  post: Post;
-  user: Pick<User, "id" | "name" | "email" | "image">;
+  post: Post & {
+    owner: Pick<User, "id" | "name" | "email" | "image">;
+    bookmarks: Pick<Bookmark, "userId" | "id">[];
+  };
   slug?: string;
 }
 
-export default function PostPreview({ post, user }: PostPreviewProps) {
+export default function PostPreview({ post }: PostPreviewProps) {
+  const user = {
+    id: post.ownerId,
+    name: post.owner.name,
+    email: post.owner.email,
+    image: post.owner.image,
+  };
+
   return (
     <article
       key={post.id}

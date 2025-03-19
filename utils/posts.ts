@@ -1,4 +1,3 @@
-import { type Post } from "@prisma/client";
 import { generateHTML } from "@tiptap/html";
 import StarterKit from "@tiptap/starter-kit";
 
@@ -25,12 +24,6 @@ export function formatDate(date: Date) {
     .replace(/(\d{2}) /, "$1, "); // Add comma after day
 }
 
-export function sortPostsByDateDesc(posts: Post[]) {
-  return posts.sort((a, b) => {
-    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
-  });
-}
-
 export function formatValue(value: string) {
   try {
     // Check if value looks like JSON
@@ -43,4 +36,22 @@ export function formatValue(value: string) {
   } catch {
     return value;
   }
+}
+
+export function postIsBookmarkedByUser(
+  bookmarks: { userId: string; id: string }[],
+  userId: string
+) {
+  if (!bookmarks || bookmarks.length === 0) {
+    return {
+      isBookmarked: false,
+      bookmarkId: "",
+    };
+  }
+
+  // return bookmarks.some((bookmark) => bookmark.userId === userId);
+  return {
+    isBookmarked: bookmarks.some((bookmark) => bookmark.userId === userId),
+    bookmarkId: bookmarks.find((bookmark) => bookmark.userId === userId)?.id,
+  };
 }

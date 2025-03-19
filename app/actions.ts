@@ -3,6 +3,7 @@ import { signIn, signOut } from "@/auth";
 import config from "@/utils/config";
 import { prisma } from "@/utils/db";
 import { generateSlug } from "@/utils/posts";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function logInUser() {
@@ -170,6 +171,60 @@ export async function updatePostBody(
       postSlug: "",
       error: true,
       completed: false,
+    };
+  }
+}
+
+export async function addBookmark(formData: FormData) {
+  const postId = String(formData.get("postId"));
+  const userId = String(formData.get("userId"));
+
+  try {
+    await prisma.bookmark.create({
+      data: {
+        userId,
+        postId,
+      },
+    });
+
+    revalidatePath(`/home/*`);
+
+    return {
+      success: true,
+      message: "Post bookmarked successfully!",
+      error: false,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Error bookmarking post!",
+      error: true,
+    };
+  }
+}
+
+export async function removeBookmark(formData: FormData) {
+  const bookmarkId = String(formData.get("bookmarkId"));
+
+  try {
+    await prisma.bookmark.delete({
+      where: { id: bookmarkId },
+    });
+
+    revalidatePath(`/home/*`);
+
+    return {
+      success: true,
+      message: "Bookmark removed successfully!",
+      error: false,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Error removing bookmark!",
+      error: true,
     };
   }
 }

@@ -6,6 +6,13 @@ import { type User } from "@prisma/client";
 // TODO: Add test coverage
 import { cache } from "react";
 
+export async function getSessionUserId() {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  return userId;
+}
+
 export const verifyUserSession = cache(async () => {
   const session = await auth();
   const userId = session?.user?.id;

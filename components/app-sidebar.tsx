@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 import { NavUser } from "@/components/nav-user";
-import { Label } from "@/components/ui/label";
+// import { Label } from "@/components/ui/label";
 import {
   Sidebar,
   SidebarContent,
@@ -23,10 +23,11 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Switch } from "@/components/ui/switch";
+// import { Switch } from "@/components/ui/switch";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type User } from "@prisma/client";
+import Bookmarks from "./posts/bookmarks/Bookmarks";
 
 const data = {
   navMain: [
@@ -59,9 +60,11 @@ const data = {
 
 export function AppSidebar({
   user,
+  bookmarks,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
   user: Pick<User, "id" | "name" | "email" | "image">;
+  bookmarks: BookmarksProps[];
 }) {
   // TODO: use the url/router to set active item
   const router = useRouter();
@@ -133,16 +136,16 @@ export function AppSidebar({
             <div className="text-foreground text-base font-medium">
               Bookmarks
             </div>
-            <Label className="flex items-center gap-2 text-sm">
+            {/* <Label className="flex items-center gap-2 text-sm">
               <span>Unreads</span>
               <Switch className="shadow-none" />
-            </Label>
+            </Label> */}
           </div>
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup className="px-0">
             <SidebarGroupContent>
-              {/* TODO: Add bookmarks */}
+              <Bookmarks bookmarks={bookmarks} />
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
