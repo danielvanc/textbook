@@ -2,34 +2,17 @@
 
 import { addBookmark } from "@/app/actions";
 import { Button } from "@/components/ui/button";
+import { useAddOptimistic } from "@/hooks/use-addOptimistic";
 import { Bookmark, BookmarkPlus } from "lucide-react";
 import Form from "next/form";
-import { useOptimistic, useState } from "react";
-import { toast } from "sonner";
 
 interface BookmarkPostType {
   userId: string;
   postId: string;
 }
 
-const initialState = {
-  message: "",
-  success: false,
-  error: false,
-};
-
 export default function AddBookmark({ userId, postId }: BookmarkPostType) {
-  const [bookmarkState, setBookmarkState] = useState(initialState);
-  const [state, setOptimisticState] = useOptimistic(bookmarkState);
-
-  async function formAction(formData: FormData) {
-    setOptimisticState({ ...bookmarkState, success: true });
-    const result = await addBookmark(formData);
-
-    setBookmarkState(result);
-
-    if (result.error) toast.error(result.message);
-  }
+  const { state, formAction } = useAddOptimistic(addBookmark);
 
   return (
     <Form action={formAction}>

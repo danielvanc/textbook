@@ -9,7 +9,7 @@ export default function Bookmarks({
     <div className="p-6">
       <ul>
         {bookmarks.length === 0 ? (
-          <li className="mb-5">No bookmarks available.</li>
+          <li className="mb-5">No bookmarks added yet.</li>
         ) : (
           bookmarks.map((bookmark) => (
             <li

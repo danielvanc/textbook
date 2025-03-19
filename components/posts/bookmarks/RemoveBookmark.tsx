@@ -1,29 +1,12 @@
 "use client";
 import { removeBookmark } from "@/app/actions";
 import { Button } from "@/components/ui/button";
+import { useAddOptimistic } from "@/hooks/use-addOptimistic";
 import { BookmarkCheck, Bookmark } from "lucide-react";
 import Form from "next/form";
-import { useOptimistic, useState } from "react";
-import { toast } from "sonner";
-
-const initialState = {
-  message: "",
-  success: false,
-  error: false,
-};
 
 export default function RemoveBookmark({ bookmarkId }: { bookmarkId: string }) {
-  const [bookmarkState, setBookmarkState] = useState(initialState);
-  const [state, setOptimisticState] = useOptimistic(bookmarkState);
-
-  async function formAction(formData: FormData) {
-    setOptimisticState({ ...bookmarkState, success: true });
-    const result = await removeBookmark(formData);
-
-    setBookmarkState(result);
-
-    if (result.error) toast.error(result.message);
-  }
+  const { state, formAction } = useAddOptimistic(removeBookmark);
 
   return (
     <Form action={formAction}>
