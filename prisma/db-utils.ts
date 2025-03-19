@@ -43,7 +43,7 @@ export function createRandomUser(incrementor: number) {
     image,
     type,
     provider,
-    providerAccountId,
+    providerAccountId: faker.string.uuid(),
     scope,
     idToken,
     email: `${username}@example.com`,
@@ -79,7 +79,7 @@ export async function pushUserToDatabase(userData: UserType) {
           create: {
             type,
             provider: userData.provider,
-            providerAccountId: faker.string.uuid(),
+            providerAccountId: userData.providerAccountId,
             access_token: userData?.access_token ?? "",
             token_type: tokenType,
             scope,
