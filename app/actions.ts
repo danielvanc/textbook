@@ -179,25 +179,22 @@ export async function bookmarkPost(formData: FormData) {
   const userId = String(formData.get("userId"));
 
   try {
-    const bookmark = await prisma.bookmark.create({
+    await prisma.bookmark.create({
       data: {
         userId,
         postId,
       },
-      select: {
-        id: true,
-      },
     });
 
     return {
-      ...bookmark,
+      success: true,
       message: "Post bookmarked successfully!",
       error: false,
     };
   } catch (error) {
     console.error(error);
     return {
-      id: "",
+      success: false,
       message: "Error bookmarking post!",
       error: true,
     };

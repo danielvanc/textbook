@@ -1,11 +1,10 @@
 "use client";
 
 import { bookmarkPost } from "@/app/actions";
-import Spinner from "@/components/icons/spinner";
 import { Button } from "@/components/ui/button";
-import { Bookmark } from "lucide-react";
+import { Bookmark, BookmarkPlus } from "lucide-react";
 import Form from "next/form";
-import { useActionState, useEffect } from "react";
+import { useOptimistic, useState } from "react";
 import { toast } from "sonner";
 
 interface BookmarkPostType {
@@ -14,41 +13,39 @@ interface BookmarkPostType {
 }
 
 const initialState = {
-  id: "",
   message: "",
+  success: false,
   error: false,
 };
 
 export default function AddBookmark({ userId, postId }: BookmarkPostType) {
-  const [state, formAction, pending] = useActionState(
-    (
-      state: { id: string; message: string; error: boolean },
-      formData: FormData
-    ) => bookmarkPost(formData),
-    initialState
-  );
+  const [bookmarkState, setBookmarkState] = useState(initialState);
+  const [state, setOptimisticState] = useOptimistic(bookmarkState);
 
-  useEffect(() => {
-    if (state.id) {
-      toast.success(state.message);
+  async function formAction(formData: FormData) {
+    setOptimisticState({ ...bookmarkState, success: true });
+    const result = await bookmarkPost(formData);
+
+    setBookmarkState(result);
+
+    if (result.error) {
+      toast.error(result.message);
+    } else {
+      toast.success(result.message);
     }
-  }, [state]);
+  }
 
   return (
     <Form action={formAction}>
-      <Button disabled={pending} className="cursor-pointer" variant={"outline"}>
-        {pending ? (
-          <>
-            <Spinner />
-            Bookmarking...
-          </>
+      <Button className="cursor-pointer" variant={"outline"}>
+        {state.success ? (
+          <BookmarkPlus className="text-orange-500" />
         ) : (
           <Bookmark />
         )}
       </Button>
       <input type="hidden" name="userId" value={userId} />
       <input type="hidden" name="postId" value={postId} />
-      {state.error && <p className="error-message">{state.message}</p>}
     </Form>
   );
 }
