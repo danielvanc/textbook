@@ -28,11 +28,7 @@ export default function AddBookmark({ userId, postId }: BookmarkPostType) {
 
     setBookmarkState(result);
 
-    if (result.error) {
-      toast.error(result.message);
-    } else {
-      toast.success(result.message);
-    }
+    if (result.error) toast.error(result.message);
   }
 
   return (
