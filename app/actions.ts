@@ -175,7 +175,7 @@ export async function updatePostBody(
   }
 }
 
-export async function bookmarkPost(formData: FormData) {
+export async function addBookmark(formData: FormData) {
   const postId = String(formData.get("postId"));
   const userId = String(formData.get("userId"));
 
@@ -199,6 +199,31 @@ export async function bookmarkPost(formData: FormData) {
     return {
       success: false,
       message: "Error bookmarking post!",
+      error: true,
+    };
+  }
+}
+
+export async function removeBookmark(formData: FormData) {
+  const bookmarkId = String(formData.get("bookmarkId"));
+
+  try {
+    await prisma.bookmark.delete({
+      where: { id: bookmarkId },
+    });
+
+    revalidatePath(`/home/*`);
+
+    return {
+      success: true,
+      message: "Bookmark removed successfully!",
+      error: false,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Error removing bookmark!",
       error: true,
     };
   }

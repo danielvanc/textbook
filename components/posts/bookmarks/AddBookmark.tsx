@@ -1,6 +1,6 @@
 "use client";
 
-import { bookmarkPost } from "@/app/actions";
+import { addBookmark } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Bookmark, BookmarkPlus } from "lucide-react";
 import Form from "next/form";
@@ -24,7 +24,7 @@ export default function AddBookmark({ userId, postId }: BookmarkPostType) {
 
   async function formAction(formData: FormData) {
     setOptimisticState({ ...bookmarkState, success: true });
-    const result = await bookmarkPost(formData);
+    const result = await addBookmark(formData);
 
     setBookmarkState(result);
 

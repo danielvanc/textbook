@@ -8,14 +8,17 @@ import RemoveBookmark from "./bookmarks/RemoveBookmark";
 export default async function PostPreHeader({
   post,
 }: {
-  post: Post & { bookmarks: Pick<Bookmark, "userId">[] };
+  post: Post & { bookmarks: Pick<Bookmark, "userId" | "id">[] };
 }) {
   const formattedDate = formatDate(post.updatedAt);
   const sessionUser = (await getSessionUserId()) as string;
 
   const isOwner = post.ownerId === sessionUser;
 
-  const isBookmarked = postIsBookmarkedByUser(post.bookmarks, sessionUser);
+  const { isBookmarked, bookmarkId } = postIsBookmarkedByUser(
+    post.bookmarks,
+    sessionUser
+  );
 
   return (
     <div className="flex items-center justify-between">
@@ -23,7 +26,9 @@ export default async function PostPreHeader({
         {formattedDate}
       </time>
       <div>
-        {!isOwner && isBookmarked && <RemoveBookmark />}
+        {!isOwner && isBookmarked && (
+          <RemoveBookmark bookmarkId={bookmarkId as string} />
+        )}
         {!isOwner && !isBookmarked && (
           <AddBookmark postId={post.id} userId={sessionUser} />
         )}

@@ -39,12 +39,19 @@ export function formatValue(value: string) {
 }
 
 export function postIsBookmarkedByUser(
-  bookmarks: { userId: string }[],
+  bookmarks: { userId: string; id: string }[],
   userId: string
 ) {
   if (!bookmarks || bookmarks.length === 0) {
-    return false;
+    return {
+      isBookmarked: false,
+      bookmarkId: "",
+    };
   }
 
-  return bookmarks.some((bookmark) => bookmark.userId === userId);
+  // return bookmarks.some((bookmark) => bookmark.userId === userId);
+  return {
+    isBookmarked: bookmarks.some((bookmark) => bookmark.userId === userId),
+    bookmarkId: bookmarks.find((bookmark) => bookmark.userId === userId)?.id,
+  };
 }
