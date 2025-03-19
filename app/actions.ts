@@ -3,6 +3,7 @@ import { signIn, signOut } from "@/auth";
 import config from "@/utils/config";
 import { prisma } from "@/utils/db";
 import { generateSlug } from "@/utils/posts";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function logInUser() {
@@ -185,6 +186,8 @@ export async function bookmarkPost(formData: FormData) {
         postId,
       },
     });
+
+    revalidatePath(`/home/*`);
 
     return {
       success: true,

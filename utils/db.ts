@@ -188,3 +188,30 @@ export async function getPost(slug: string): Promise<
     console.error(error);
   }
 }
+
+export async function getBookmarksForUser(userId: string) {
+  return await prisma.bookmark.findMany({
+    where: { userId },
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      id: true,
+      post: {
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          updatedAt: true,
+          owner: {
+            select: {
+              id: true,
+              name: true,
+              username: true,
+            },
+          },
+        },
+      },
+    },
+  });
+}
