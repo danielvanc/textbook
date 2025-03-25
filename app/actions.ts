@@ -5,6 +5,9 @@ import { prisma } from "@/utils/db";
 import { generateSlug } from "@/utils/posts";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { parseWithZod } from "@conform-to/zod";
+import { newPostSchema } from "@/lib/schemas";
+import type { SubmissionResult } from "@conform-to/react";
 
 export async function logInUser() {
   await signIn("google", { redirectTo: config.appRoute });
@@ -14,11 +17,22 @@ export async function logOutUser() {
   await signOut();
 }
 
-export async function createPost(formData: FormData) {
+export async function createPost(
+  prevState: unknown,
+  formData: FormData
+): Promise<SubmissionResult<string[]> | undefined> {
   const userId = String(formData.get("userId"));
   const title = String(formData.get("title"));
   const content = String(formData.get("content"));
   const description = String(formData.get("description"));
+
+  const submission = parseWithZod(formData, { schema: newPostSchema });
+
+  if (submission.status !== "success") {
+    submission.reply({
+      formErrors: ["Incorrect data supplied, please check your input."],
+    });
+  }
 
   try {
     await prisma.$transaction(async (tx) => {
@@ -45,11 +59,11 @@ export async function createPost(formData: FormData) {
     });
   } catch (error) {
     console.error(error);
-    // TODO: Make less generic
-    if (error instanceof Error) {
-      return { message: error.message };
-    }
-    return { message: "Failed to create post" };
+    // // TODO: Make less generic
+    // if (error instanceof Error) {
+    //   return { message: error.message };
+    // }
+    // return { message: "Failed to create post" };
   }
 
   redirect("/home/posts");
