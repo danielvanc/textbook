@@ -10,7 +10,7 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 import { withOptimize } from "@prisma/extension-optimize";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { redirect } from "next/navigation";
-import { styleText } from "util";
+import { styleText } from "node:util";
 
 const isProd = process.env.NODE_ENV === "production";
 const isOptimizeMode = !!process.env.OPTIMIZE;
