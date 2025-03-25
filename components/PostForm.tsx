@@ -42,6 +42,7 @@ export default function PostForm({ userId, action, children }: PostFormProps) {
           type="text"
           key={fields.title.key}
           name={fields.title.name}
+          defaultValue={fields.title.value}
           className="block w-full"
           placeholder="Title"
           required
@@ -70,6 +71,7 @@ export default function PostForm({ userId, action, children }: PostFormProps) {
           type="text"
           key={fields.description.key}
           name={fields.description.name}
+          defaultValue={fields.description.value}
           className="block w-full"
           placeholder="Description"
           required

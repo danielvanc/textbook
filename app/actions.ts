@@ -59,11 +59,12 @@ export async function createPost(
     });
   } catch (error) {
     console.error(error);
-    // // TODO: Make less generic
-    // if (error instanceof Error) {
-    //   return { message: error.message };
-    // }
-    // return { message: "Failed to create post" };
+
+    return submission.reply({
+      formErrors: [
+        "There were problems while creating the post. Please try again",
+      ],
+    });
   }
 
   redirect("/home/posts");
