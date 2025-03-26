@@ -12,6 +12,8 @@ import {
 } from "react";
 import { flushSync } from "react-dom";
 import { toast } from "sonner";
+import { editTitleSchema, editDescriptionSchema } from "@/lib/schemas";
+
 interface EditableFieldsProps {
   action: (
     initialState: EditableStateProps,
@@ -38,6 +40,8 @@ export default function useEditableFields({
   const fieldRef = useRef<HTMLInputElement & HTMLTextAreaElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+
+  const schema = type === "text" ? editTitleSchema : editDescriptionSchema;
 
   const [
     state = {
@@ -70,6 +74,27 @@ export default function useEditableFields({
       onSubmit: async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
+        const fieldSubmitted =
+          type === "text"
+            ? "title"
+            : type === "textarea"
+            ? "description"
+            : undefined;
+
+        if (typeof fieldSubmitted !== "undefined") {
+          const field = formData.get(fieldSubmitted);
+          const result = schema.safeParse(field);
+          console.log("result", result);
+
+          if (!result.success) {
+            toast.error(
+              <p className="text-red-500">{result.error.format()._errors[0]}</p>
+            );
+
+            return;
+          }
+        }
+
         flushSync(() => {
           setValue(fieldRef.current?.value ?? "");
           setIsEditing(false);
