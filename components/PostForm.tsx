@@ -46,6 +46,7 @@ export default function PostForm({ userId, action, children }: PostFormProps) {
           className="block w-full"
           placeholder="Title"
           required
+          maxLength={100}
         />
         <span className=" text-red-500">{fields.title.errors}</span>
       </p>
