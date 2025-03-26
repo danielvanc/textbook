@@ -84,7 +84,6 @@ export default function useEditableFields({
         if (typeof fieldSubmitted !== "undefined") {
           const field = formData.get(fieldSubmitted);
           const result = schema.safeParse(field);
-          console.log("result", result);
 
           if (!result.success) {
             toast.error(

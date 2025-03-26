@@ -47,6 +47,7 @@ export default function EditableDescription({
                   className: "w-full mb-8 text-lg font-normal",
                   id: "description",
                   name: "description",
+                  placeholder: "Enter a description",
                 })}
               />
             </p>
