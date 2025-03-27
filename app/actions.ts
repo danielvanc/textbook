@@ -6,8 +6,17 @@ import { generateSlug } from "@/utils/posts";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { parseWithZod } from "@conform-to/zod";
-import { newPostSchema } from "@/lib/schemas";
+import {
+  editDescriptionSchema,
+  editTitleSchema,
+  newPostSchema,
+} from "@/lib/schemas";
 import type { SubmissionResult } from "@conform-to/react";
+
+const errorResponse = {
+  error: true,
+  completed: false,
+};
 
 export async function logInUser() {
   await signIn("google", { redirectTo: config.appRoute });
@@ -95,6 +104,16 @@ export async function updatePostTitle(
   const postId = String(formData.get("postId"));
   const title = String(formData.get("title"));
   const slug = generateSlug(title, postId);
+  const errors = {
+    ...errorResponse,
+    message: "Error updating the title!",
+    postSlug: "",
+  };
+  const result = editTitleSchema.safeParse(title);
+
+  if (!result.success) {
+    return { ...errors, message: result.error.format()._errors[0] };
+  }
 
   try {
     await prisma.post.update({
@@ -113,12 +132,7 @@ export async function updatePostTitle(
     };
   } catch (error) {
     console.error(error);
-    return {
-      message: "Error updating the title!",
-      postSlug: "",
-      error: true,
-      completed: false,
-    };
+    return errors;
   }
 }
 
@@ -128,6 +142,18 @@ export async function updatePostDescription(
 ) {
   const postId = String(formData.get("postId"));
   const description = String(formData.get("description"));
+
+  const errors = {
+    ...errorResponse,
+    message: "Error updating the Description!",
+    postSlug: "",
+  };
+
+  const result = editDescriptionSchema.safeParse(description);
+
+  if (!result.success) {
+    return { ...errors, message: result.error.format()._errors[0] };
+  }
 
   try {
     await prisma.post.update({
@@ -144,12 +170,7 @@ export async function updatePostDescription(
     };
   } catch (error) {
     console.error(error);
-    return {
-      message: "Error updating the description!",
-      postSlug: "",
-      error: true,
-      completed: false,
-    };
+    return errors;
   }
 }
 

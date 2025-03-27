@@ -69,8 +69,10 @@ export default function EditableDescription({
             </button>
           </div>
         )}
+        {state?.error && (
+          <p className="text-red-500 text-sm">{state.message}</p>
+        )}
       </div>
-      {state?.error && <p className="text-red-500">{state.message}</p>}
     </>
   );
 }
