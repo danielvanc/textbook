@@ -49,7 +49,6 @@ export function postIsBookmarkedByUser(
     };
   }
 
-  // return bookmarks.some((bookmark) => bookmark.userId === userId);
   return {
     isBookmarked: bookmarks.some((bookmark) => bookmark.userId === userId),
     bookmarkId: bookmarks.find((bookmark) => bookmark.userId === userId)?.id,

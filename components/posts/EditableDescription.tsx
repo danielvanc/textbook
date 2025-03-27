@@ -47,6 +47,7 @@ export default function EditableDescription({
                   className: "w-full mb-8 text-lg font-normal",
                   id: "description",
                   name: "description",
+                  placeholder: "Enter a description",
                 })}
               />
             </p>
@@ -68,8 +69,10 @@ export default function EditableDescription({
             </button>
           </div>
         )}
+        {state?.error && (
+          <p className="text-red-500 text-sm">{state.message}</p>
+        )}
       </div>
-      {state?.error && <p className="text-red-500">{state.message}</p>}
     </>
   );
 }

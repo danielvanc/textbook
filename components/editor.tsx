@@ -210,6 +210,7 @@ export default function TTEditor<Props>({
     content,
     immediatelyRender: false,
     autofocus: true,
+    injectCSS: false,
     editorProps: {
       attributes: {
         class: "min-h-24 border-t-2 pt-6 pb-2 border-gray-200 ",

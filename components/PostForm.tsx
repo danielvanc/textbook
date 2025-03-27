@@ -1,39 +1,54 @@
 "use client";
 import Editor from "@/components/editor";
-import Form from "next/form";
+import { parseWithZod } from "@conform-to/zod";
+import { useForm, type SubmissionResult } from "@conform-to/react";
 import { useActionState } from "react";
+import { newPostSchema } from "@/lib/schemas";
 
 type PostFormProps = {
   userId: string;
-  action: (formData: FormData) => Promise<{ message: string }>;
+  action: (
+    prevState: unknown,
+    formData: FormData
+  ) => Promise<SubmissionResult<string[]> | undefined>;
   children: React.ReactNode;
 };
 
-const initialState = {
-  message: "",
-};
 export default function PostForm({ userId, action, children }: PostFormProps) {
-  const [state, formAction] = useActionState(
-    (state: { message: string }, formData: FormData) => action(formData),
-    initialState
-  );
+  const [state, formAction] = useActionState(action, undefined);
+
+  const [form, fields] = useForm({
+    shouldValidate: "onSubmit",
+    shouldRevalidate: "onInput",
+    lastResult: state,
+    onValidate: ({ formData }: { formData: FormData }) =>
+      parseWithZod(formData, { schema: newPostSchema }),
+  });
+
   return (
-    <Form
+    <form
+      id={form.id}
+      onSubmit={form.onSubmit}
       action={formAction}
       className="flex flex-col gap-y-4 [&>p]:flex gap-4 [&>p]:justify-between [&>label]: [&>p>input]:border-1 [&>p>input]:p-2"
+      noValidate
     >
       <input type="hidden" name="userId" defaultValue={userId} />
-      <p>
+      <p className="flex flex-col gap-2">
         <label htmlFor="title" className="sr-only">
           Title
         </label>
         <input
           type="text"
-          id="title"
-          name="title"
+          key={fields.title.key}
+          name={fields.title.name}
+          defaultValue={fields.title.value}
           className="block w-full"
           placeholder="Title"
+          required
+          maxLength={100}
         />
+        <span className=" text-red-500">{fields.title.errors}</span>
       </p>
       {/* TODO: Enable image upload*/}
       {/* <p>
@@ -49,21 +64,24 @@ export default function PostForm({ userId, action, children }: PostFormProps) {
           />
         </label>
       </p> */}
-      <p>
+      <p className="flex flex-col gap-2">
         <label htmlFor="description" className="sr-only">
           Description
         </label>
         <input
           type="text"
-          id="description"
-          name="description"
+          key={fields.description.key}
+          name={fields.description.name}
+          defaultValue={fields.description.value}
           className="block w-full"
           placeholder="Description"
+          required
         />
+        <span className="text-red-500">{fields.description.errors}</span>
       </p>
       <Editor />
-      {state?.message && <p className="text-red-500">{state.message}</p>}
+      {form.errors && <p className="text-red-500">{form.errors}</p>}
       {children}
-    </Form>
+    </form>
   );
 }

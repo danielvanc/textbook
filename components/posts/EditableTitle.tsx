@@ -64,8 +64,10 @@ export default function EditableTitle({
             </button>
           </div>
         )}
+        {state?.error && (
+          <small className="text-red-500 block text-sm">{state.message}</small>
+        )}
       </h3>
-      {state?.error && <p className="text-red-500">{state.message}</p>}
     </>
   );
 }
