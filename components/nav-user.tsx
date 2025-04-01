@@ -21,6 +21,7 @@ import {
 
 import { logOutUser } from "@/app/actions";
 import { type User } from "@prisma/client";
+import Link from "next/link";
 
 function logUserOut(event: React.FormEvent<HTMLFormElement>) {
   event.preventDefault();
@@ -28,7 +29,7 @@ function logUserOut(event: React.FormEvent<HTMLFormElement>) {
 }
 
 interface NavUserProps {
-  user: Pick<User, "id" | "name" | "email" | "image">;
+  user: Pick<User, "id" | "name" | "email" | "image" | "username">;
 }
 
 export function NavUser({ user }: NavUserProps) {
@@ -84,7 +85,9 @@ export function NavUser({ user }: NavUserProps) {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <CircleUser />
-                <span className="line-through">My profile</span>
+                <span>
+                  <Link href={`/home/${user.username}`}>My profile</Link>
+                </span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

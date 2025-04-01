@@ -215,3 +215,30 @@ export async function getBookmarksForUser(userId: string) {
     },
   });
 }
+
+export async function findUserByUsername(
+  username: string
+): Promise<User | null> {
+  try {
+    return await prisma.user.findUnique({
+      where: { username },
+    });
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function findUsernameBySessionUser(userId: string) {
+  try {
+    return await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        username: true,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
