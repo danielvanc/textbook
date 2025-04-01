@@ -63,7 +63,7 @@ export function AppSidebar({
   bookmarks,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
-  user: Pick<User, "id" | "name" | "email" | "image">;
+  user: Pick<User, "id" | "name" | "email" | "image" | "username">;
   bookmarks: BookmarksProps[];
 }) {
   // TODO: use the url/router to set active item

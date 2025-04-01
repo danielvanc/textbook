@@ -23,9 +23,7 @@ export default function Bookmark({ post }: { post: BookmarkProps }) {
         <p className="text-right">
           <small>
             By{" "}
-            <Link href={`/home/user/@${post.owner.username}`}>
-              {post.owner.name}
-            </Link>
+            <Link href={`/home/${post.owner.username}`}>{post.owner.name}</Link>
           </small>
         </p>
       </div>

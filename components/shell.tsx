@@ -10,7 +10,7 @@ import { getBookmarksForUser } from "@/utils/db";
 import { type User } from "@prisma/client";
 
 interface ShellProps {
-  user: Pick<User, "id" | "name" | "email" | "image">;
+  user: Pick<User, "id" | "name" | "email" | "image" | "username">;
   children: React.ReactNode;
 }
 
