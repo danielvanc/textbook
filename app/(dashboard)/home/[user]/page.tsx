@@ -1,6 +1,7 @@
 import { findUserByUsername } from "@/utils/db";
 import { verifyUserSession } from "@/utils/session";
 import Image from "next/image";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default async function ProfilePage({
   params,
@@ -39,6 +40,25 @@ export default async function ProfilePage({
             {name}
             <small className="block font-normal">@{username}</small>
           </h1>
+
+          <div>
+            <Tabs defaultValue="posts" className="w-full">
+              <TabsList>
+                <TabsTrigger value="posts">Posts</TabsTrigger>
+                <TabsTrigger value="bookmarks">Bookmarks</TabsTrigger>
+                <TabsTrigger value="following">Following</TabsTrigger>
+                <TabsTrigger value="followers">Followers</TabsTrigger>
+              </TabsList>
+              <TabsContent value="posts">Your posts</TabsContent>
+              <TabsContent value="bookmarks">Your bookmarks</TabsContent>
+              <TabsContent value="following">
+                View the accounts you are following here.
+              </TabsContent>
+              <TabsContent value="followers">
+                See who follows you here.
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
       </div>
     </div>
