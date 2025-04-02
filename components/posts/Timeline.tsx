@@ -1,5 +1,6 @@
 import type { Bookmark, Post, User } from "@prisma/client";
 import PostPreview from "./PostPreview";
+import PostPreHeader from "./PostPreHeader";
 
 interface TimelineProps {
   posts: (Post & {
@@ -13,5 +14,9 @@ export default function Timeline({ posts }: TimelineProps) {
     return <p>Looks like no posts have been made yet</p>;
   }
 
-  return posts.map((post) => <PostPreview key={post.id} post={post} />);
+  return posts.map((post) => (
+    <PostPreview key={post.id} post={post}>
+      <PostPreHeader post={post} />
+    </PostPreview>
+  ));
 }

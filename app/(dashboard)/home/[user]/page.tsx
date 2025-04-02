@@ -1,6 +1,10 @@
-import { findUserByUsername } from "@/utils/db";
+import { findUserByUsername, getUsersPosts } from "@/utils/db";
 import { verifyUserSession } from "@/utils/session";
 import Image from "next/image";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AllPosts } from "@/components/profile/allPosts";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 export default async function ProfilePage({
   params,
@@ -15,6 +19,7 @@ export default async function ProfilePage({
     return <div>User not found</div>;
   }
   const { username, name, image } = userDetails;
+  const userPosts = getUsersPosts(userDetails.id);
 
   return (
     <div className="container">
@@ -39,6 +44,33 @@ export default async function ProfilePage({
             {name}
             <small className="block font-normal">@{username}</small>
           </h1>
+
+          <div>
+            <Tabs defaultValue="posts" className="w-full">
+              <TabsList>
+                <TabsTrigger value="posts">Posts</TabsTrigger>
+                <TabsTrigger value="bookmarks">Bookmarks</TabsTrigger>
+                <TabsTrigger value="following">Following</TabsTrigger>
+                <TabsTrigger value="followers">Followers</TabsTrigger>
+              </TabsList>
+              <div className="pt-5">
+                <TabsContent value="posts">
+                  <ErrorBoundary fallback={<p>⚠️Something went wrong</p>}>
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <AllPosts data={userPosts} />
+                    </Suspense>
+                  </ErrorBoundary>
+                </TabsContent>
+                <TabsContent value="bookmarks">Your bookmarks</TabsContent>
+                <TabsContent value="following">
+                  View the accounts you are following here.
+                </TabsContent>
+                <TabsContent value="followers">
+                  See who follows you here.
+                </TabsContent>
+              </div>
+            </Tabs>
+          </div>
         </div>
       </div>
     </div>
