@@ -1,17 +1,7 @@
-import { type User, type Post, type Bookmark } from "@prisma/client";
 import Link from "next/link";
 import PostFooter from "./PostFooter";
-import PostPreHeader from "./PostPreHeader";
 
-interface PostPreviewProps {
-  post: Post & {
-    owner: Pick<User, "id" | "name" | "email" | "image">;
-    bookmarks: Pick<Bookmark, "userId" | "id">[];
-  };
-  slug?: string;
-}
-
-export default function PostPreview({ post }: PostPreviewProps) {
+export default function PostPreview({ post, children }: PostPreviewProps) {
   const user = {
     id: post.ownerId,
     name: post.owner.name,
@@ -24,7 +14,7 @@ export default function PostPreview({ post }: PostPreviewProps) {
       key={post.id}
       className="[&:not(:last-child)]:border-b-1 border-gray-200 [&:not(:last-child)]:mb-8"
     >
-      <PostPreHeader post={post} />
+      {children}
       <div className="group relative">
         <header>
           <h3 className="mt-3 text-3xl/8 font-semibold text-gray-900">

@@ -1,3 +1,17 @@
+interface AllUserPostsProps {
+  posts: (Post & { bookmarks: Pick<Bookmark, "userId" | "id">[] })[];
+  user: Pick<User, "id" | "name" | "email" | "image">;
+}
+
+interface PostPreviewProps {
+  post: Post & {
+    owner: Pick<User, "id" | "name" | "email" | "image">;
+    bookmarks: Pick<Bookmark, "userId" | "id">[];
+  };
+  children: React.ReactNode;
+  slug?: string;
+}
+
 interface EditableStateProps {
   message: string;
   error: boolean;

@@ -1,10 +1,5 @@
-import { type User, type Post, type Bookmark } from "@prisma/client";
+import PostPreHeader from "./PostPreHeader";
 import PostPreview from "./PostPreview";
-
-interface AllUserPostsProps {
-  posts: (Post & { bookmarks: Pick<Bookmark, "userId" | "id">[] })[];
-  user: Pick<User, "id" | "name" | "email" | "image">;
-}
 
 export default function AllUserPosts({ posts, user }: AllUserPostsProps) {
   if (!posts || posts.length === 0) {
@@ -18,6 +13,10 @@ export default function AllUserPosts({ posts, user }: AllUserPostsProps) {
         ...user,
       },
     };
-    return <PostPreview key={post.id} post={mergedUserAndPost} />;
+    return (
+      <PostPreview key={post.id} post={mergedUserAndPost}>
+        <PostPreHeader post={post} />
+      </PostPreview>
+    );
   });
 }
