@@ -10,7 +10,7 @@ import { withAccelerate } from "@prisma/extension-accelerate";
 import { withOptimize } from "@prisma/extension-optimize";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { redirect } from "next/navigation";
-import { styleText } from "node:util";
+import chalk from "chalk";
 
 const isProd = process.env.NODE_ENV === "production";
 const isOptimizeMode = !!process.env.OPTIMIZE;
@@ -31,7 +31,10 @@ export const prisma = remember("prisma", () => {
         : e.duration < logThreshold * 1.4
         ? "redBright"
         : "red";
-    const dur = styleText(color, `${e.duration}ms`);
+    // const dur = chalk(color, `${e.duration}ms`);
+    // console.info(`prisma:query - ${dur} - ${e.query}`);
+
+    const dur = chalk[color](`${e.duration}ms`);
     console.info(`prisma:query - ${dur} - ${e.query}`);
   }
 
