@@ -5,7 +5,7 @@ import { prisma } from "@/utils/db";
 import { generateSlug } from "@/utils/posts";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { parseWithZod } from "@conform-to/zod";
+import { parseWithZod } from "@conform-to/zod/v4";
 import {
   editDescriptionSchema,
   editTitleSchema,

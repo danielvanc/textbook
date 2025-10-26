@@ -31,8 +31,6 @@ export const prisma = remember("prisma", () => {
         : e.duration < logThreshold * 1.4
         ? "redBright"
         : "red";
-    // const dur = chalk(color, `${e.duration}ms`);
-    // console.info(`prisma:query - ${dur} - ${e.query}`);
 
     const dur = chalk[color](`${e.duration}ms`);
     console.info(`prisma:query - ${dur} - ${e.query}`);
