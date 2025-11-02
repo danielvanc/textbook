@@ -1,6 +1,6 @@
 "use client";
 import Editor from "@/components/editor";
-import { parseWithZod } from "@conform-to/zod";
+import { parseWithZod } from "@conform-to/zod/v4";
 import { useForm, type SubmissionResult } from "@conform-to/react";
 import { useActionState } from "react";
 import { newPostSchema } from "@/lib/schemas";

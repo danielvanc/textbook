@@ -19,8 +19,8 @@
     "db:studio": "dotenv -e .env.development npx prisma studio"
   },
   "dependencies": {
-    "@conform-to/react": "^1.13.1",
-    "@conform-to/zod": "^1.13.1",
+    "@conform-to/react": "^1.13.2",
+    "@conform-to/zod": "^1.13.2",
     "@epic-web/remember": "^1.1.0",
     "@prisma/client": "^6.16.2",
     "@prisma/extension-accelerate": "^2.0.2",

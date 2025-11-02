@@ -5,6 +5,6 @@ const config = {
   sessionCookie: !!process.env.VERCEL_URL
     ? "__Secure-authjs.session-token"
     : "authjs.session-token",
-};
+} as const;
 
 export default config;

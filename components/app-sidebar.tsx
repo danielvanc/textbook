@@ -56,7 +56,7 @@ const data = {
       isActive: true,
     },
   ],
-};
+} as const;
 
 export function AppSidebar({
   user,
@@ -68,7 +68,9 @@ export function AppSidebar({
 }) {
   // TODO: use the url/router to set active item
   const router = useRouter();
-  const [activeItem, setActiveItem] = React.useState(data.navMain[2]);
+  const [activeItem, setActiveItem] = React.useState<
+    (typeof data.navMain)[number]
+  >(data.navMain[2]);
   const { setOpen } = useSidebar();
 
   return (
